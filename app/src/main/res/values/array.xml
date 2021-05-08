@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sex">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="diag_tired">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_pain">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_bodypart">
+        <item>Facial</item>
+        <item>Skins</item>
+        <item>Bone and join</item>
+        <item>Ear, nose and throat</item>
+        <item>Eyes</item>
+        <item>Cant determine</item>
+    </string-array>
+    <string-array name="diag_breathing">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_anorexia">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_loseweight">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_digestion">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_skin_color">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_pregnant">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="diag_categorize">
+        <item>Organs</item>
+        <item>Mental</item>
+        <item>Physiologic</item>
+        <item>Nutrition</item>
+        <item>Body</item>
+    </string-array>
+
+</resources>
