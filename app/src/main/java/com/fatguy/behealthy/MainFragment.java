@@ -15,7 +15,8 @@ public class MainFragment extends Fragment {
 
     private View root;
     private ImageView Diagnose;
-    private FragmentManager fmg ;
+    private ImageView Tracker;
+    private final FragmentManager fmg ;
 
     public MainFragment(FragmentManager fragmentManager) {
         fmg = fragmentManager;
@@ -38,6 +39,13 @@ public class MainFragment extends Fragment {
                 render_diagnose();
             }
         });
+        Tracker = root.findViewById(R.id.btnTracker);
+        Tracker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                render_tracker();
+            }
+        });
         return root;
     }
 
@@ -50,5 +58,11 @@ public class MainFragment extends Fragment {
         TopBarDiagFragment topfrag = new TopBarDiagFragment();
         fmg.beginTransaction().replace(R.id.layoutMain,mainfrag,mainfrag.getTag()).commit();
         fmg.beginTransaction().replace(R.id.layout_top_nav,topfrag,topfrag.getTag()).commit();
+    }
+    protected  void render_tracker() {
+        TrackerFragment trackerFragment = new TrackerFragment();
+        TopBarMainFragment topBarMainFragment = new TopBarMainFragment();
+        fmg.beginTransaction().replace(R.id.layoutMain,trackerFragment,trackerFragment.getTag()).commit();
+        fmg.beginTransaction().replace(R.id.layout_top_nav,topBarMainFragment,topBarMainFragment.getTag()).commit();
     }
 }
