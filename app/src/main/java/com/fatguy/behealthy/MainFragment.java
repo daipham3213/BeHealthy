@@ -1,5 +1,6 @@
 package com.fatguy.behealthy;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -43,7 +44,8 @@ public class MainFragment extends Fragment {
         Tracker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                render_tracker();
+                //render_tracker();
+                startActivity(new Intent(getContext(), StepActivity.class));
             }
         });
         return root;
