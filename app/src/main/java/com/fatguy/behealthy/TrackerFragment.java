@@ -35,8 +35,7 @@ public class TrackerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_tracker, container, false);
-        step_chart = root.findViewById(R.id.tracker_weekly_chart);
-        //Add value to the chart (steps)
+        step_chart = root.findViewById(R.id.tracker_step_chart);
         int target = 1000;
         int counted  = 800;
         addValue_pie(step_chart,target, counted);
