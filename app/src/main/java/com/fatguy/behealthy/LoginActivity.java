@@ -61,7 +61,7 @@ public class LoginActivity extends Activity {
 
     public void signIn(String Email, String Password)
     {
-        mAuth.createUserWithEmailAndPassword(Email, Password)
+        mAuth.signInWithEmailAndPassword(Email, Password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
