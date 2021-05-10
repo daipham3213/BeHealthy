@@ -144,7 +144,6 @@ public class RegisterActivity extends Activity {
         User user= new User(Name, Email, Sex, Date);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference().child("User").child(UID);
-        //Key la ID nen Child
         ref.setValue(user);
     }
 

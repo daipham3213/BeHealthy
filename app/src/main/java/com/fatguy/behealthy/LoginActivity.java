@@ -66,15 +66,15 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.d(TAG, "loginUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Log.w(TAG, "loginUserWithEmail:failure", task.getException());
 
                             Toast.makeText(LoginActivity.this,
-                                    "Authentication failed."+task.getException(),
+                                    "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }

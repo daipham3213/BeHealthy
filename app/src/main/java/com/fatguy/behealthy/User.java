@@ -75,16 +75,6 @@ public class User {
     }
 
     public User() {
-
-    }
-
-    public void add (String name, String email, String sex, Date date)
-    {
-        String ID = FirebaseAuth.getInstance().getUid();
-        User user= new User(name, email, sex, date);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child("User").child(ID);
-        ref.setValue(user);
     }
 
 }
