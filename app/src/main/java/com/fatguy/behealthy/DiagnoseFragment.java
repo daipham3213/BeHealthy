@@ -69,4 +69,9 @@ public class DiagnoseFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
 }

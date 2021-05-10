@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "711358214866",
+    "firebase_url": "https://fb-java-behealthy-default-rtdb.firebaseio.com",
+    "project_id": "fb-java-behealthy",
+    "storage_bucket": "fb-java-behealthy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711358214866:android:5f3f13a63ca32f625bf30b",
+        "android_client_info": {
+          "package_name": "com.fatguy.behealthy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711358214866-550uu6clsvat4qrteg5dn4e67a79oegf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOupIx6YUosq4DF9iKtzMB1pTecn1D20E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711358214866-550uu6clsvat4qrteg5dn4e67a79oegf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
