@@ -1,7 +1,6 @@
 package com.fatguy.behealthy;
 
 import android.content.Intent;
-import android.nfc.tech.TagTechnology;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +22,10 @@ public class MainFragment extends Fragment {
 
     public MainFragment(FragmentManager fragmentManager) {
         fmg = fragmentManager;
+    }
+    public MainFragment()
+    {
+            fmg = getActivity().getSupportFragmentManager();
     }
 
     @Override
@@ -57,15 +60,12 @@ public class MainFragment extends Fragment {
     }
     protected void render_diagnose()
     {
-        DiagnoseFragment mainfrag = new DiagnoseFragment(getContext());
-        TopBarDiagFragment topfrag = new TopBarDiagFragment();
-        fmg.beginTransaction().replace(R.id.layoutMain,mainfrag,mainfrag.getTag()).addToBackStack(TAG).commit();
-        fmg.beginTransaction().replace(R.id.layout_top_nav,topfrag,topfrag.getTag()).commit();
+        DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
+        TopBarDiagFragment topFrag = new TopBarDiagFragment();
+        fmg.beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
+        fmg.beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
     }
     protected  void render_tracker() {
-        TrackerFragment trackerFragment = new TrackerFragment();
-        TopBarMainFragment topBarMainFragment = new TopBarMainFragment();
-        fmg.beginTransaction().replace(R.id.layoutMain,trackerFragment,trackerFragment.getTag()).addToBackStack( TAG ).commit();
-        fmg.beginTransaction().replace(R.id.layout_top_nav,topBarMainFragment,topBarMainFragment.getTag()).commit();
+        startActivity(new Intent(getActivity(),TrackerActivity.class));
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fatguy.behealthy">
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,7 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_login"></activity>
         <activity
-            android:name=".StepActivity"
+            android:name=".TrackerActivity"
             android:label="@string/title_activity_login"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
