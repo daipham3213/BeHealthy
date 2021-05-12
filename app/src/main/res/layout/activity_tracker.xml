@@ -29,23 +29,19 @@
 
             <com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
                 android:id="@+id/tracker_chart"
-                android:layout_width="260dp"
+                android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="205dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="205dp"
-                android:layout_marginBottom="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/animateToEnd"
-                app:layout_constraintVertical_bias="1.0"
-                app:rcIconSrc="@drawable/ic_ambulance"
                 app:rcBackgroundColor="#0A000000"
                 app:rcBackgroundPadding="2dp"
                 app:rcIconBackgroundColor="#00796B"
                 app:rcIconPadding="5dp"
                 app:rcIconSize="40dp"
+                app:rcIconSrc="@drawable/ic_ambulance"
                 app:rcMax="100"
                 app:rcProgressColor="@color/md_teal_300"
                 app:rcRadius="5dp"
@@ -65,6 +61,29 @@
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/ridding" />
+
+            <TextView
+                android:id="@+id/tracker_txtProgess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="180dp"
+                android:text="null/null"
+                app:layout_constraintEnd_toStartOf="@+id/tracker_txtPercent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
+
+            <TextView
+                android:id="@+id/tracker_txtPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginTop="4dp"
+                android:text="0%"
+                app:layout_constraintStart_toEndOf="@+id/tracker_txtProgess"
+                app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

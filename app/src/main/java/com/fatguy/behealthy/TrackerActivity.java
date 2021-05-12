@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,8 @@ public class TrackerActivity extends Activity implements SensorEventListener {
     final long[] counted = new long[1];
     private Sensor stepSensor;
     boolean running = false;
+    private TextView number;
+    private TextView percent;
     String d2s;
     String TAG = "TrackerFragment";
 
@@ -59,17 +62,12 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         mData = FirebaseDatabase.getInstance();
         mRef = mData.getReference().child("StepCounter").child(mAuth.getUid()); //link to Step table of current user of today
         step_chart = findViewById(R.id.tracker_chart);
+        number =findViewById(R.id.tracker_txtProgess);
+        percent =findViewById(R.id.tracker_txtPercent);
         loadData();
         reset_chart();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null){
-            sensorManager.unregisterListener(this,stepSensor);
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -155,6 +153,8 @@ public class TrackerActivity extends Activity implements SensorEventListener {
     private void progress(long target, long counted){
         if (target == 0) target = 1; //divide by 0
         float percent =( (float)counted/target)*100;
+        this.percent.setText(String.valueOf((int)percent)+"%");
+        number.setText(total_step+" / "+target);
         step_chart.setProgress(percent);
     }
 
