@@ -17,56 +17,54 @@
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="700dp">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/tracker_step_chart"
-                android:layout_width="321dp"
-                android:layout_height="222dp"
-                android:layout_marginStart="45dp"
+
+            <com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
+                android:id="@+id/tracker_chart"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="205dp"
                 android:layout_marginTop="40dp"
-                android:layout_marginEnd="44dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginEnd="205dp"
+                android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/animateToEnd">
-
-            </com.github.mikephil.charting.charts.PieChart>
+                app:layout_constraintTop_toBottomOf="@+id/animateToEnd"
+                app:layout_constraintVertical_bias="1.0"
+                app:rcIconSrc="@drawable/ic_ambulance"
+                app:rcBackgroundColor="#0A000000"
+                app:rcBackgroundPadding="2dp"
+                app:rcIconBackgroundColor="#00796B"
+                app:rcIconPadding="5dp"
+                app:rcIconSize="40dp"
+                app:rcMax="100"
+                app:rcProgressColor="@color/md_teal_300"
+                app:rcRadius="5dp"
+                app:rcReverse="true" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animateToEnd"
                 android:layout_width="200dp"
-                android:layout_height="140dp"
-                android:layout_marginTop="40dp"
-                app:layout_constraintBottom_toTopOf="@+id/tracker_step_chart"
+                android:layout_height="200dp"
+                android:layout_marginStart="106dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="104dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tracker_weekly_chart"
+                app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/ridding" />
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/tracker_weekly_chart"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/animateToEnd"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </com.github.mikephil.charting.charts.BarChart>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
