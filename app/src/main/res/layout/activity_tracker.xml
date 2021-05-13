@@ -83,6 +83,11 @@
                 android:text="0%"
                 app:layout_constraintStart_toEndOf="@+id/tracker_txtProgess"
                 app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tracker_weekly_chart"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

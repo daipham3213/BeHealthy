@@ -17,6 +17,7 @@ public class MainFragment extends Fragment {
     private View root;
     private ImageView Diagnose;
     private ImageView Tracker;
+    private ImageView Reminder;
     private final FragmentManager fmg ;
     private final String TAG ="MainActivity";
 
@@ -52,7 +53,18 @@ public class MainFragment extends Fragment {
                 render_tracker();
             }
         });
+        Reminder = root.findViewById(R.id.btnReminder);
+        Reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                render_reminder();
+            }
+        });
         return root;
+    }
+
+    private void render_reminder() {
+        startActivity(new Intent(getActivity(),ReminderActivity.class));
     }
 
     public View getRoot() {

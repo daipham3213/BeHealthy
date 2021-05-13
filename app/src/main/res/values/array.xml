@@ -53,4 +53,13 @@
         <item>Body</item>
     </string-array>
 
+    <string-array name="screen_time">
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>5 hours</item>
+        <item>6 hours</item>
+        <item>7 hours</item>
+        <item>8 hours</item>
+    </string-array>
+
 </resources>

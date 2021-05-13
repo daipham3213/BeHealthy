@@ -316,9 +316,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffbd38" />
-                            <entry key="outputName" value="ic_baseline_star_24" />
-                            <entry key="sourceFile" value="C:\Users\Admin\Desktop\111077-medical-icons\svg\lungs-silhouette.svg" />
+                            <entry key="outputName" value="ic_drinking_water" />
+                            <entry key="sourceFile" value="C:\Users\Admin\Downloads\drinking-water.svg" />
                           </map>
                         </option>
                       </PersistentState>

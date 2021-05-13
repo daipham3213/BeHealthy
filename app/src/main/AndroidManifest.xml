@@ -16,10 +16,13 @@
             android:label="@string/title_activity_login"></activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="RegisterActivity"></activity>
         <activity
             android:name=".TrackerActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="TrackerActivity"></activity>
+        <activity
+            android:name=".ReminderActivity"
+            android:label="ReminderActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
