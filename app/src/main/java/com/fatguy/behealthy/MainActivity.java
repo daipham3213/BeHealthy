@@ -86,29 +86,31 @@ public class MainActivity extends AppCompatActivity  {
             LoginActivity login = new LoginActivity(mAuth);
             startActivity(new Intent(MainActivity.this, login.getClass()));
         }
-        mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
+        else {
+            mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
 
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.hasChild(d2s)){
-                    screenTimeDB = (long) snapshot.child(d2s).getValue();
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild(d2s)){
+                        screenTimeDB = (long) snapshot.child(d2s).getValue();
+                    }
+                    else mRef.child(d2s).setValue(0);
                 }
-                else mRef.child(d2s).setValue(0);
-            }
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
 
-        IntentFilter lockFilter = new IntentFilter();
-        lockFilter.addAction(Intent.ACTION_SCREEN_ON);
-        lockFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        this.registerReceiver(screen, lockFilter);
-        screen.onReceive(this,this.getIntent());
-        render_main();
+            IntentFilter lockFilter = new IntentFilter();
+            lockFilter.addAction(Intent.ACTION_SCREEN_ON);
+            lockFilter.addAction(Intent.ACTION_SCREEN_OFF);
+            this.registerReceiver(screen, lockFilter);
+            screen.onReceive(this,this.getIntent());
+            render_main();
+        }
     }
 
     @Override

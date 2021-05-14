@@ -48,6 +48,7 @@ public class ReminderActivity extends Activity {
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
     private long onScreen;
+
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -134,6 +135,18 @@ public class ReminderActivity extends Activity {
                     mRef.child("ScreenTime").child("State").setValue(false);
                     mRef.child("ScreenTime").child("Value").setValue(0);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+        mRef.child("DrinkWater").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
             }
 
             @Override

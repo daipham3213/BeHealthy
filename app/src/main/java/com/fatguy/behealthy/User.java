@@ -12,19 +12,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Date;
 
 public class User {
-    private String User_Id;
     private String name ;
     private String email;
-    private String pass ;
     private String sex ;
-    private Date date ;
+    private String date ;
+    private float weight;
+    private float height;
+    private int age;
 
-    public String getUser_Id() {
-        return User_Id;
-    }
-
-    public void setUser_Id(String user_Id) {
-        User_Id = user_Id;
+    public User(String name, String email, String sex, String date, float weight, float height, int age) {
+        this.name = name;
+        this.email = email;
+        this.sex = sex;
+        this.date = date;
+        this.weight = weight;
+        this.height = height;
+        this.age = age;
     }
 
     public String getName() {
@@ -43,13 +46,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
 
     public String getSex() {
         return sex;
@@ -59,19 +55,36 @@ public class User {
         this.sex = sex;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public User(String name, String email, String sex, Date date) {
-        this.name = name;
-        this.email = email;
-        this.sex = sex;
-        this.date = date;
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public User() {

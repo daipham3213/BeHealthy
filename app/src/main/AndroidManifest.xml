@@ -17,13 +17,16 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".RegisterActivity"
-            android:label="RegisterActivity" />
+            android:label="RegisterActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".TrackerActivity"
-            android:label="TrackerActivity" />
+            android:label="TrackerActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ReminderActivity"
             android:label="ReminderActivity" />
