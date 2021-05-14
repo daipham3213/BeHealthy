@@ -2,14 +2,13 @@ package com.fatguy.behealthy;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 public class MainFragment extends Fragment {
@@ -18,15 +17,11 @@ public class MainFragment extends Fragment {
     private ImageView Diagnose;
     private ImageView Tracker;
     private ImageView Reminder;
-    private final FragmentManager fmg ;
     private final String TAG ="MainActivity";
 
-    public MainFragment(FragmentManager fragmentManager) {
-        fmg = fragmentManager;
-    }
     public MainFragment()
     {
-            fmg = getActivity().getSupportFragmentManager();
+
     }
 
     @Override
@@ -74,8 +69,8 @@ public class MainFragment extends Fragment {
     {
         DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
         TopBarDiagFragment topFrag = new TopBarDiagFragment();
-        fmg.beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
-        fmg.beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
     }
     protected  void render_tracker() {
         startActivity(new Intent(getActivity(),TrackerActivity.class));

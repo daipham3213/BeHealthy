@@ -61,5 +61,13 @@
         <item>7 hours</item>
         <item>8 hours</item>
     </string-array>
+    <string-array name="cup_size">
+        <item>100ml</item>
+        <item>200ml</item>
+        <item>300ml</item>
+        <item>400ml</item>
+        <item>500ml</item>
+        <item>600ml</item>
+    </string-array>
 
 </resources>

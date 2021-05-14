@@ -87,7 +87,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
             total_step = (long) event.values[0];
             long currStep = total_step - counted[0];
             saveData(total_step);
-            progress(target[0], total_step);
+            progress(target[0], counted[0] + currStep);
             Log.d(TAG, "New step detected! - " + currStep);
         }
     }
@@ -129,7 +129,11 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                 if (snapshot.hasChild(d2s))
                 {
                     counted[0] = (long) snapshot.child(d2s).child("counted").getValue();
-                    target [0] = (long) snapshot.child(d2s).child("target").getValue();
+                    if (snapshot.child(d2s).child("target").getValue() != null)
+                    {
+                        target[0] = (long) snapshot.child(d2s).child("target").getValue();
+                    }
+                    else mRef.child(d2s).child("target").setValue(8000);
                     progress(target[0], counted[0]);
                 }
                 else
@@ -139,6 +143,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     Log.d(TAG, "New instance set!");
                     progress(8000, 0);
                 }
+                Log.d(TAG, "Steps counted on DB: "+counted[0]);
             }
 
             @Override
@@ -146,7 +151,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
 
             }
         });
-        Log.d(TAG, "Steps counted on DB: "+counted[0]);
+
 
     }
 
