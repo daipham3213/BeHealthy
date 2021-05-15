@@ -62,6 +62,8 @@ public class ReminderActivity extends Activity {
     private ArrayList<Integer> hour;
     private ArrayList <Integer> min;
     private ArrayList <String> cups;
+    int hourStart = 7;
+    int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
 
 
@@ -130,10 +132,19 @@ public class ReminderActivity extends Activity {
 
             }
         });
+
+        swtWater.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked) {
+                    hourStart = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    minStart =Calendar.getInstance().get(Calendar.MINUTE);
+                }
+            }
+        });
     }
 
     private void createNotificationChannel() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "fatguy Chanel";
             String description = "Reminder - Remind you to have a better health!";
@@ -154,6 +165,8 @@ public class ReminderActivity extends Activity {
         mRef.child("ScreenTime").child("Value").setValue(spnScreen.getSelectedItemPosition());
         mRef.child("DrinkWater").child("Enable").setValue(swtWater.isChecked());
         mRef.child("DrinkWater").child("CupSize").setValue((spnWater.getSelectedItemPosition()+1)*100);
+        mRef.child("DrinkWater").child("Hour").setValue(hourStart);
+        mRef.child("DrinkWater").child("Min").setValue(minStart);
     }
 
     private void LoadList(int resId, Spinner spn) {
@@ -212,7 +225,7 @@ public class ReminderActivity extends Activity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
-                if (snapshot.hasChild("WaterAmount") & snapshot.child("WaterAmount").getValue(Long.class)!=0) {
+                if (snapshot.hasChild("WaterAmount") & snapshot.child("WaterAmount").getValue(Long.class)!=null) {
                     waterAmount = snapshot.child("WaterAmount").getValue(Float.class);
                 } else mRef.child("DrinkWater").child("WaterAmount").setValue(getWaterAmount(user.getWeight(),user.getAge()));
 
@@ -223,6 +236,18 @@ public class ReminderActivity extends Activity {
                 if (snapshot.hasChild("CupSize")){
                     cupSize = snapshot.child("CupSize").getValue(Long.class);
                 } else mRef.child("DrinkWater").child("CupSize").setValue(100);
+
+                if (snapshot.hasChild("Enable")){
+                    swtWater.setChecked(snapshot.child("Enable").getValue(Boolean.class));
+                } else mRef.child("DrinkWater").child("Enable").setValue(false);
+
+                if (snapshot.hasChild("Hour")){
+                    hourStart = snapshot.child("Hour").getValue(Integer.class);
+                } else mRef.child("DrinkWater").child("Hour").setValue(7);
+
+                if (snapshot.hasChild("Min")){
+                    minStart =snapshot.child("Min").getValue(Integer.class);
+                } else mRef.child("DrinkWater").child("Hour").setValue(30);
 
                 progress(waterAmount,consumed);
                 spnWater.setSelection((int) (cupSize/100-1));
@@ -265,8 +290,9 @@ public class ReminderActivity extends Activity {
     }
 
     private void scheduleUp (float amount, long cupSize){
-        int h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int m = Calendar.getInstance().get(Calendar.MINUTE);
+        int h = hourStart;
+        int m = minStart;
+
         cups = new ArrayList<>();
         hour = new ArrayList<>();
         min = new ArrayList<>();
@@ -274,7 +300,7 @@ public class ReminderActivity extends Activity {
         while (temp > 0) {
             while (temp < cupSize && cupSize > 0) cupSize -= 100;
             if (cupSize <=0) {
-                cups.add(temp +"");
+                cups.add(Math.round(temp) +"");
                 temp = 0;
             } else
             {
@@ -284,6 +310,9 @@ public class ReminderActivity extends Activity {
             hour.add(h);
             min.add(m);
             h++;
+            if (h > 23) {
+                h = h - 24;
+            }
         }
     }
 }
