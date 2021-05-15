@@ -5,11 +5,14 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,8 +22,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +38,7 @@ import com.suke.widget.SwitchButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -48,9 +55,19 @@ public class ReminderActivity extends Activity {
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
     private long onScreen;
+    private User user;
+    float waterAmount;
+    long consumed;
+    long cupSize;
+    private ArrayList<Integer> hour;
+    private ArrayList <Integer> min;
+    private ArrayList <String> cups;
+    private IconRoundCornerProgressBar waterBar;
+
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
+    NotificationCompat.Builder water_notify;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     String d2s;
 
@@ -65,6 +82,8 @@ public class ReminderActivity extends Activity {
         spnWater = findViewById(R.id.reminder_spnWater);
         Date date = Calendar.getInstance().getTime();
         d2s = dateFormat.format(date);
+        waterBar = findViewById(R.id.reminder_water_chart);
+
         createNotificationChannel();
 
         mAuth = FirebaseAuth.getInstance();
@@ -74,13 +93,43 @@ public class ReminderActivity extends Activity {
                 .setSmallIcon(R.drawable.ic_smartphone)
                 .setContentTitle("Reminder - Alert")
                 .setContentText("Don't stare at your screen all day!!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-        notifyManage =  NotificationManagerCompat.from(this);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        PendingIntent waterIntentLater = PendingIntent.
+                getActivity(this,0,
+                        new Intent(this, ReminderActivity.class),
+                        PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent waterIntentOk = PendingIntent.
+                getActivity(this,0,
+                        new Intent(this, ReminderActivity.class),
+                        PendingIntent.FLAG_ONE_SHOT);
+
+        water_notify = new NotificationCompat.Builder(this, "fatguyA")
+                .setSmallIcon(R.drawable.ic_glass_of_water)
+                .setContentTitle("Reminder - Alert")
+                .setContentText("Don't forget to drink lots of water!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater)
+                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk);
+
+        notifyManage =  NotificationManagerCompat.from(this);
+        user = new User();
 
         LoadList(R.array.screen_time,spnScreen);
         LoadList(R.array.cup_size,spnWater);
         LoadData();
+
+        spnWater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                DisplaySchedule(waterAmount-consumed,(position + 1)*100);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void createNotificationChannel() {
@@ -103,7 +152,8 @@ public class ReminderActivity extends Activity {
         super.onPause();
         mRef.child("ScreenTime").child("State").setValue(swtScreen.isChecked());
         mRef.child("ScreenTime").child("Value").setValue(spnScreen.getSelectedItemPosition());
-
+        mRef.child("DrinkWater").child("Enable").setValue(swtWater.isChecked());
+        mRef.child("DrinkWater").child("CupSize").setValue((spnWater.getSelectedItemPosition()+1)*100);
     }
 
     private void LoadList(int resId, Spinner spn) {
@@ -143,10 +193,41 @@ public class ReminderActivity extends Activity {
             }
         });
 
+         DatabaseReference User = FirebaseDatabase.getInstance().getReference().child("User").child(mAuth.getUid());
+         User.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                 user.setSex(snapshot.child("sex").getValue(String.class));
+                 user.setAge(snapshot.child("age").getValue(Integer.class));
+                 user.setWeight(snapshot.child("weight").getValue(Float.class));
+             }
+
+             @Override
+             public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+             }
+         });
+
         mRef.child("DrinkWater").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
+                if (snapshot.hasChild("WaterAmount") & snapshot.child("WaterAmount").getValue(Long.class)!=0) {
+                    waterAmount = snapshot.child("WaterAmount").getValue(Float.class);
+                } else mRef.child("DrinkWater").child("WaterAmount").setValue(getWaterAmount(user.getWeight(),user.getAge()));
+
+                if (snapshot.child(d2s).hasChild("Consumed")){
+                    consumed = snapshot.child(d2s).child("Consumed").getValue(Long.TYPE);
+                } else mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(0);
+
+                if (snapshot.hasChild("CupSize")){
+                    cupSize = snapshot.child("CupSize").getValue(Long.class);
+                } else mRef.child("DrinkWater").child("CupSize").setValue(100);
+
+                progress(waterAmount,consumed);
+                spnWater.setSelection((int) (cupSize/100-1));
+
+                DisplaySchedule(waterAmount-consumed,cupSize);
             }
 
             @Override
@@ -157,4 +238,52 @@ public class ReminderActivity extends Activity {
 
     }
 
+    private void DisplaySchedule (float amount, long cupSize){
+        scheduleUp(amount,cupSize);
+        rclWater = findViewById(R.id.reminder_rclWater);
+        TimeStampAdapter schedule = new TimeStampAdapter(ReminderActivity.this,hour,min,cups);
+
+        rclWater.setAdapter(schedule);
+        rclWater.setLayoutManager(new LinearLayoutManager(ReminderActivity.this));
+    }
+
+    private float getWaterAmount(float weight, int age){
+        float amount = 0;
+        if (age<30) amount =  (weight*40);
+        if (age>29 & age<55) amount =  (weight*35);
+        if (age>55) amount =  (weight*30);
+        amount = (float) (amount / (28.3*33.8));
+        return amount*1000;
+    }
+
+    private void progress(float target, float counted){
+        if (target == 0) target = 1; //divide by 0
+        float percent =( (float)counted/target)*100;
+//        this.percent.setText(String.valueOf((int)percent)+"%");
+//        number.setText(total_step+" / "+target);
+        waterBar.setProgress(percent);
+    }
+
+    private void scheduleUp (float amount, long cupSize){
+        int h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int m = Calendar.getInstance().get(Calendar.MINUTE);
+        cups = new ArrayList<>();
+        hour = new ArrayList<>();
+        min = new ArrayList<>();
+        float temp = amount;
+        while (temp > 0) {
+            while (temp < cupSize && cupSize > 0) cupSize -= 100;
+            if (cupSize <=0) {
+                cups.add(temp +"");
+                temp = 0;
+            } else
+            {
+                cups.add(cupSize+"");
+                temp -= cupSize;
+            }
+            hour.add(h);
+            min.add(m);
+            h++;
+        }
+    }
 }

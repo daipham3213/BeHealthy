@@ -19,12 +19,14 @@ public class TimeStampAdapter extends RecyclerView.Adapter<TimeStampAdapter.View
     private Context context;
     private ArrayList<Integer> hour;
     private ArrayList <Integer> min;
+    private ArrayList <String> cups;
     private static final String TAG = "RecyclerViewAdapter";
 
-    public TimeStampAdapter(Context context, ArrayList<Integer> hour, ArrayList<Integer> min) {
+    public TimeStampAdapter(Context context, ArrayList<Integer> hour, ArrayList<Integer> min, ArrayList <String> cups) {
         this.context = context;
         this.hour = hour;
         this.min = min;
+        this.cups = cups;
     }
 
     @NonNull
@@ -43,6 +45,7 @@ public class TimeStampAdapter extends RecyclerView.Adapter<TimeStampAdapter.View
         Log.d(TAG, "onBindViewHolder: called");
         holder.h.setText(hour.get(position).toString());
         holder.m.setText(min.get(position).toString());
+        holder.a.setText(cups.get(position) + " ml");
     }
 
     @Override
@@ -53,10 +56,12 @@ public class TimeStampAdapter extends RecyclerView.Adapter<TimeStampAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView h;
         TextView m;
+        TextView a;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             h = itemView.findViewById(R.id.time_hour);
             m = itemView.findViewById(R.id.time_min);
+            a = itemView.findViewById(R.id.time_txtAmount);
         }
     }
 }

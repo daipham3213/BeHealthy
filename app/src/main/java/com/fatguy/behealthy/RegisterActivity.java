@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,10 +66,11 @@ public class RegisterActivity extends Activity {
     {
         edtDate = findViewById(R.id.reg_txtDate);
 
-        edtDate.setOnClickListener(new View.OnClickListener() {
+        edtDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onTouch(View v, MotionEvent event) {
                 PickADate();
+                return true;
             }
         });
         spnSex = (Spinner) findViewById(R.id.reg_spn_sex);
@@ -93,7 +95,7 @@ public class RegisterActivity extends Activity {
                 String date = "";
                 date = edtDate.getText().toString();
                 String year = edtDate.getText().toString();
-                year = year.substring(year.lastIndexOf("-"));
+                year = year.substring(year.lastIndexOf("-")+1);
                 Age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(year);
                 signUp(name,email,pass,sex,date,w,h,Age);
 

@@ -84,6 +84,9 @@ public class LoginActivity extends Activity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null)
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class).
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        );
     }
 }

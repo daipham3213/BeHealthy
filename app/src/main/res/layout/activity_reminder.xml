@@ -212,12 +212,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:layout_marginTop="64dp"
                         android:text="Cup Size"
+                        app:layout_constraintBottom_toBottomOf="@+id/reminder_spnWater"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.428"
-                        app:layout_constraintStart_toEndOf="@+id/reminder_spnWater"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toEndOf="@+id/reminder_spnWater" />
 
                     <TextView
                         android:id="@+id/textView6"

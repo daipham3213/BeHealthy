@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity  {
         if (currentUser == null)
         {
             LoginActivity login = new LoginActivity(mAuth);
-            startActivity(new Intent(MainActivity.this, login.getClass()));
+            startActivity(new Intent(MainActivity.this, login.getClass())
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
         }
         else {
             mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
