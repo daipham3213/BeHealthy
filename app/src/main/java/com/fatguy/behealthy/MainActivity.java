@@ -2,16 +2,24 @@ package com.fatguy.behealthy;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +34,8 @@ import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
@@ -41,6 +51,8 @@ public class MainActivity extends AppCompatActivity  {
     private final long TIME_ERROR = 1000;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     String d2s;
+
+
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
     private BroadcastReceiver screen = new BroadcastReceiver() {
@@ -75,7 +87,9 @@ public class MainActivity extends AppCompatActivity  {
 
         Initial_Main();
 
+
     }
+
 
     public void Initial_Main()
     {

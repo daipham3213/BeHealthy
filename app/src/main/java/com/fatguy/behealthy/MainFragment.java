@@ -17,6 +17,8 @@ public class MainFragment extends Fragment {
     private ImageView Diagnose;
     private ImageView Tracker;
     private ImageView Reminder;
+    private ImageView Hospital;
+
     private final String TAG ="MainActivity";
 
     public MainFragment()
@@ -55,11 +57,24 @@ public class MainFragment extends Fragment {
                 render_reminder();
             }
         });
+        Hospital = root.findViewById(R.id.btnAmblance);
+        Hospital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                render_hosptal();
+            }
+        });
+
+
         return root;
     }
 
+    private void render_hosptal() {
+        startActivity(new Intent(getActivity(),HospitalActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
     private void render_reminder() {
-        startActivity(new Intent(getActivity(),ReminderActivity.class));
+        startActivity(new Intent(getActivity(),ReminderActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     public View getRoot() {
