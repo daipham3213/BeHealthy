@@ -7,19 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder>{
+public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
 
-    private Context context;
-    private ArrayList <String> name;
-    private ArrayList <String> address;
-    private ArrayList <String> status;
-    private ArrayList <Double> rate;
+    private final Context context;
+    private final ArrayList<String> name;
+    private final ArrayList<String> address;
+    private final ArrayList<String> status;
+    private final ArrayList<Double> rate;
 
     private static final String TAG = "RecyclerViewAdapter";
 
@@ -59,12 +60,22 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         TextView Address;
         TextView Rate;
         TextView Status;
+        CardView Map;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             Name = itemView.findViewById(R.id.list_hospital_name);
             Address = itemView.findViewById(R.id.hospital_address);
             Rate = itemView.findViewById(R.id.hospital_rate);
             Status = itemView.findViewById(R.id.hospital_business_status);
+            Map = itemView.findViewById(R.id.hospital_btnMap);
+
+            Map.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
         }
     }
 }

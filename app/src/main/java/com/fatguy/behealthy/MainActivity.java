@@ -1,25 +1,16 @@
 package com.fatguy.behealthy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,18 +25,16 @@ import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity  {
 
-    private FragmentManager mng = getSupportFragmentManager();
+    private final FragmentManager mng = getSupportFragmentManager();
     private FirebaseAuth mAuth;
     private long startTimer;
     private long endTimer;
-    private long screenOnTimeSingle = 0;
+    private final long screenOnTimeSingle = 0;
     private long screenTime = 0;
     private long screenTimeDB = 0;
     private final long TIME_ERROR = 1000;
@@ -53,17 +42,15 @@ public class MainActivity extends AppCompatActivity  {
     String d2s;
 
 
-
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-    private BroadcastReceiver screen = new BroadcastReceiver() {
+    private final BroadcastReceiver screen = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("BroadcastReceiver", "ScreenTimeService onReceive");
 
-            if(intent.getAction().equals(Intent.ACTION_SCREEN_ON)){
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 startTimer = System.currentTimeMillis();
-            }
-            else if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)){
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 endTimer = System.currentTimeMillis();
                 screenTime = endTimer - startTimer;
 
@@ -98,9 +85,10 @@ public class MainActivity extends AppCompatActivity  {
         if (currentUser == null)
         {
             LoginActivity login = new LoginActivity(mAuth);
+            this.finish();
             startActivity(new Intent(MainActivity.this, login.getClass())
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
         else {
             mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
