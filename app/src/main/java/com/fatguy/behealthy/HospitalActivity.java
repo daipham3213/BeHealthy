@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -20,6 +21,7 @@ import com.fatguy.behealthy.gmap.results;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class HospitalActivity extends Activity {
 
@@ -28,13 +30,14 @@ public class HospitalActivity extends Activity {
     Location final_loc;
     double longitude;
     double latitude;
-    JSONgmap jsonMap;
+    final String TAG = "HospitalActivity";
     private RecyclerView hospitals;
-
-    private ArrayList<String> name = new ArrayList<>();
-    private ArrayList <String> address = new ArrayList<>();
-    private ArrayList <String> status = new ArrayList<>();
-    private ArrayList <Double> rate = new ArrayList<>();
+    private final ArrayList<String> name = new ArrayList<>();
+    private final ArrayList<String> address = new ArrayList<>();
+    private final ArrayList<String> status = new ArrayList<>();
+    private final ArrayList<Double> rate = new ArrayList<>();
+    JSONgmap jsonMap = new JSONgmap();
+    getData data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,31 +45,38 @@ public class HospitalActivity extends Activity {
         setContentView(R.layout.activity_nearby_hospital);
 
         hospitals = findViewById(R.id.hospital_rclView);
+        try {
+            getCurrLocation();
+            Log.d(TAG, "hospitalListInit: getLocation");
+            data = new getData(this, longitude, latitude, 1000, "hospital");
+            hospitalListInit();
+        } catch (JSONException | InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
-        getCurrLocation();
-        //hospitalListInit();
-        getData data = new getData(this,longitude, latitude,1000,"hospital");
-        jsonMap = data.taskStart();
 
-        if (jsonMap!=null)
-            if (jsonMap.getStatus() == "OK"){
-                for (int i=0; i<jsonMap.getResults().length; i++){
+    }
+
+    private void hospitalListInit() throws JSONException, InterruptedException, ExecutionException {
+        jsonMap = data.getMap();
+        if (jsonMap != null)
+            if (jsonMap.getStatus() != null) {
+                Log.d(TAG, "hospitalListInit: translateData");
+                int count = jsonMap.counter();
+                for (int i = 0; i < count; i++) {
+                    Log.d(TAG, "onCreate: hospital list +1");
                     results rs = jsonMap.getResults()[i];
                     plus_code pl = rs.getPlus_code();
                     name.add(rs.getName());
-                    address.add(rs.getVicinity()+pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
+                    address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
                     status.add(rs.getBusiness_status());
                     rate.add(rs.getRating());
                 }
             }
-
-        HospitalAdapter adapter = new HospitalAdapter(this,name,address,status,rate);
+        Log.d(TAG, "hospitalListInit: initAdapter");
+        HospitalAdapter adapter = new HospitalAdapter(this, name, address, status, rate);
         hospitals.setAdapter(adapter);
         hospitals.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void hospitalListInit (){
-
     }
 
     private void getCurrLocation() {
@@ -102,8 +112,6 @@ public class HospitalActivity extends Activity {
             longitude = 0.0;
         }
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACTIVITY_RECOGNITION}, 1);
-
     }
-
 
 }

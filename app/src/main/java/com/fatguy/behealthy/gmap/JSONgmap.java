@@ -5,6 +5,10 @@ public class JSONgmap {
     private results[] results;
     private String status;
 
+    public int counter() {
+        return results.length;
+    }
+
     public JSONgmap() {
     }
 

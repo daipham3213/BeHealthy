@@ -24,7 +24,7 @@ public class LoginActivity extends Activity {
     private Button Login;
     private EditText Email;
     private EditText Pass;
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
     private final String TAG = "LoginActivity";
 
     public LoginActivity(FirebaseAuth mAuth) {
@@ -84,9 +84,6 @@ public class LoginActivity extends Activity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null)
-        startActivity(new Intent(LoginActivity.this, MainActivity.class).
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).
-                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        );
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 }
