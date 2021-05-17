@@ -85,9 +85,9 @@ public class MainFragment extends Fragment {
         DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
         TopBarDiagFragment topFrag = new TopBarDiagFragment();
         getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
-        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).addToBackStack(TAG).commit();
     }
     protected  void render_tracker() {
-        startActivity(new Intent(getActivity(),TrackerActivity.class));
+        startActivity(new Intent(getActivity(),TrackerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

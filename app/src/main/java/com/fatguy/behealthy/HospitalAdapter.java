@@ -1,10 +1,13 @@
 package com.fatguy.behealthy;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,15 +24,19 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
     private final ArrayList<String> address;
     private final ArrayList<String> status;
     private final ArrayList<Double> rate;
+    private final ArrayList<Double> lat;
+    private final ArrayList<Double> lng ;
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    public HospitalAdapter(Context context, ArrayList<String> name, ArrayList<String> address, ArrayList<String> status, ArrayList<Double> rate) {
+    public HospitalAdapter(Context context, ArrayList<String> name, ArrayList<String> address, ArrayList<String> status, ArrayList<Double> rate, ArrayList<Double> lat, ArrayList<Double> lng) {
         this.context = context;
         this.name = name;
         this.address = address;
         this.status = status;
         this.rate = rate;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     @NonNull
@@ -47,6 +54,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         holder.Address.setText(address.get(position));
         holder.Status.setText(status.get(position));
         holder.Rate.setText(rate.get(position).toString());
+
     }
 
 
@@ -72,7 +80,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
             Map.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    itemView.getContext().startActivity(new Intent(itemView.getContext(), ActivityGmap.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
 

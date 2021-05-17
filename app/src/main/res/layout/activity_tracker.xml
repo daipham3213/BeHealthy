@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:context=".TrackerActivity">
 
@@ -49,13 +49,13 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animateToEnd"
-                android:layout_width="200dp"
+                android:layout_width="wrap_content"
                 android:layout_height="200dp"
                 android:layout_marginStart="106dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="104dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
@@ -83,11 +83,17 @@
                 android:text="0%"
                 app:layout_constraintStart_toEndOf="@+id/tracker_txtProgess"
                 app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
+
             <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/tracker_weekly_chart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tracker_weekly_chart"
-                />
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

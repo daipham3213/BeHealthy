@@ -85,6 +85,6 @@ public class LoginActivity extends Activity {
     private void updateUI(FirebaseUser user) {
         if (user != null)
             this.finish();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

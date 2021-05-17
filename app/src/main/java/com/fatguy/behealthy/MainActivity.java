@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity  {
     private final long TIME_ERROR = 1000;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     String d2s;
+    private Intent mainIntent;
 
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +88,9 @@ public class MainActivity extends AppCompatActivity  {
         {
             LoginActivity login = new LoginActivity(mAuth);
             this.finish();
-            startActivity(new Intent(MainActivity.this, login.getClass())
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            mainIntent =new Intent(MainActivity.this, login.getClass())
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(mainIntent);
         }
         else {
             mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
@@ -111,8 +113,7 @@ public class MainActivity extends AppCompatActivity  {
             IntentFilter lockFilter = new IntentFilter();
             lockFilter.addAction(Intent.ACTION_SCREEN_ON);
             lockFilter.addAction(Intent.ACTION_SCREEN_OFF);
-            this.registerReceiver(screen, lockFilter);
-            screen.onReceive(this,this.getIntent());
+            registerReceiver(screen, lockFilter);
             render_main();
         }
     }

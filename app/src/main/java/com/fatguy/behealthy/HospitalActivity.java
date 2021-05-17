@@ -36,6 +36,8 @@ public class HospitalActivity extends Activity {
     private final ArrayList<String> address = new ArrayList<>();
     private final ArrayList<String> status = new ArrayList<>();
     private final ArrayList<Double> rate = new ArrayList<>();
+    private final ArrayList<Double> lat = new ArrayList<>();
+    private final ArrayList<Double> lng = new ArrayList<>();
     JSONgmap jsonMap = new JSONgmap();
     getData data;
 
@@ -71,10 +73,12 @@ public class HospitalActivity extends Activity {
                     address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
                     status.add(rs.getBusiness_status());
                     rate.add(rs.getRating());
+                    lat.add(rs.getGeometry().getLocation().getLat());
+                    lng.add(rs.getGeometry().getLocation().getLng());
                 }
             }
         Log.d(TAG, "hospitalListInit: initAdapter");
-        HospitalAdapter adapter = new HospitalAdapter(this, name, address, status, rate);
+        HospitalAdapter adapter = new HospitalAdapter(this, name, address, status, rate, lat, lng);
         hospitals.setAdapter(adapter);
         hospitals.setLayoutManager(new LinearLayoutManager(this));
     }
