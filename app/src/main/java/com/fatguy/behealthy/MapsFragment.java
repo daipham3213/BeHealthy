@@ -25,17 +25,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public static String Status;
     Double lng;
     Double lat;
-    TextView Name;
-    TextView Address;
-    TextView RaTe;
-    TextView txtStatus;
     View root;
 
-    public MapsFragment (String name, String address, Double rate, String status, Double lat, Double lng){
-        this.name = name;
-        this.address = address;
-        this.Status = status;
-        this.rate = rate;
+    public MapsFragment (Double lat, Double lng){
         this.lat = lat;
         this.lng = lng;
     }
@@ -45,21 +37,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.activity_gmap, container, false);
+        root = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map_fragMap);
+        SupportMapFragment mapFragment = (SupportMapFragment)  this.getChildFragmentManager()
+                .findFragmentById(R.id.frag_gmap_cont);
         mapFragment.getMapAsync(this);
-
-        Name = root.findViewById(R.id.frag_map_name2);
-        Address = root.findViewById(R.id.frag_map_address);
-        RaTe = root.findViewById(R.id.frag_map_rate);
-        txtStatus = root.findViewById(R.id.frag_map_business_status);
-
-        Name.setText(this.name);
-        Address.setText(this.address);
-        RaTe.setText(Double.valueOf(this.rate).toString());
-        txtStatus.setText(this.Status);
 
         return root;
     }
@@ -75,5 +57,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         LatLng MLatLng = new LatLng(lat,lng);
         googleMap.addMarker(new MarkerOptions().position(MLatLng).title(this.name));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(MLatLng));
+        googleMap.setMinZoomPreference(15.0f);
+        googleMap.setMaxZoomPreference(34.0f);
     }
 }

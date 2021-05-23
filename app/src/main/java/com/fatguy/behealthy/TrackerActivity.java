@@ -152,6 +152,11 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     mRef.child(d2s).child("target").setValue(8000);
                     Log.d(TAG, "New instance set!");
                     progress(8000, 0);
+                    prev_step = total_step;
+                    counted[0] = 0;
+                    progress(target[0], counted[0]);
+                    Log.d(TAG, "Reseted");
+                    saveData(0);
                 }
                 Log.d(TAG, "Steps counted on DB: "+counted[0]);
             }

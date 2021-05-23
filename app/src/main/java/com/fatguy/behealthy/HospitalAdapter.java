@@ -1,13 +1,11 @@
 package com.fatguy.behealthy;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -26,7 +24,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
     private final ArrayList<Double> rate;
     private final ArrayList<Double> lat;
     private final ArrayList<Double> lng ;
-    static ActivityGmap gmap;
+    static AcitivityGMap gmap;
     private int pos;
 
     private static final String TAG = "RecyclerViewAdapter";
@@ -90,8 +88,8 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         }
 
         public void show (int pos){
-            gmap = new ActivityGmap(name.get(pos),address.get(pos), rate.get(pos), status.get(pos),lat.get(pos),lng.get(pos));
-            itemView.getContext().startActivity(new Intent(itemView.getContext(), ActivityGmap.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            gmap = new AcitivityGMap(name.get(pos),address.get(pos), rate.get(pos), status.get(pos),lat.get(pos),lng.get(pos));
+            itemView.getContext().startActivity(new Intent(itemView.getContext(), gmap.getClass()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 }
