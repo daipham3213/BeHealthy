@@ -26,6 +26,8 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
     private final ArrayList<Double> rate;
     private final ArrayList<Double> lat;
     private final ArrayList<Double> lng ;
+    static ActivityGmap gmap;
+    private int pos;
 
     private static final String TAG = "RecyclerViewAdapter";
 
@@ -54,6 +56,14 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
         holder.Address.setText(address.get(position));
         holder.Status.setText(status.get(position));
         holder.Rate.setText(rate.get(position).toString());
+        holder.Map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pos = position;
+                ViewHolder vh = new ViewHolder(holder.itemView);
+                vh.show(pos);
+            }
+        });
 
     }
 
@@ -77,13 +87,11 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
             Status = itemView.findViewById(R.id.hospital_business_status);
             Map = itemView.findViewById(R.id.hospital_btnMap);
 
-            Map.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(), ActivityGmap.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });
+        }
 
+        public void show (int pos){
+            gmap = new ActivityGmap(name.get(pos),address.get(pos), rate.get(pos), status.get(pos),lat.get(pos),lng.get(pos));
+            itemView.getContext().startActivity(new Intent(itemView.getContext(), ActivityGmap.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 }

@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <fragment
         android:id="@+id/map_fragMap"
         android:layout_width="409dp"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_height="600dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
@@ -15,9 +16,8 @@
         app:layout_constraintBottom_toTopOf="@+id/hospital_btnMap"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/hospital_btnMap"
@@ -32,7 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map_fragMap">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/hospital_click"
             android:layout_width="match_parent"
@@ -41,12 +40,12 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/list_hospital_name"
+                android:id="@+id/frag_map_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Some one's name"
+                android:text="Some one's name2"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,21 +58,21 @@
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/ic_baseline_star_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/hospital_rate"
-                app:layout_constraintTop_toBottomOf="@+id/hospital_address" />
+                app:layout_constraintEnd_toStartOf="@+id/frag_map_rate"
+                app:layout_constraintTop_toBottomOf="@+id/frag_map_address" />
 
             <TextView
-                android:id="@+id/hospital_address"
+                android:id="@+id/frag_map_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="3dp"
                 android:text="TextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/list_hospital_name" />
+                app:layout_constraintTop_toBottomOf="@+id/frag_map_name2" />
 
             <TextView
-                android:id="@+id/hospital_rate"
+                android:id="@+id/frag_map_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="14dp"
@@ -81,10 +80,10 @@
                 android:text="4.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/hospital_address" />
+                app:layout_constraintTop_toBottomOf="@+id/frag_map_address" />
 
             <TextView
-                android:id="@+id/hospital_business_status"
+                android:id="@+id/frag_map_business_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -92,7 +91,7 @@
                 android:text="Open"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/hospital_address" />
+                app:layout_constraintTop_toBottomOf="@+id/frag_map_address" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

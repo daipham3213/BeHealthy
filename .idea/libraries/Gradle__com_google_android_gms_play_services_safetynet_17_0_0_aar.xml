@@ -8,6 +8,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/res" />
+      <root url="file://$USER_HOME$/BeHealthy/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/res" />
+      <root url="jar://$USER_HOME$/BeHealthy/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/BeHealthy/.gradle/caches/transforms-3/4f7f1a5212d77449f25ea6b92cf14794/transformed/play-services-safetynet-17.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
