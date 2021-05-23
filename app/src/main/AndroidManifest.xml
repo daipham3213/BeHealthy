@@ -35,29 +35,29 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:label="RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".TrackerActivity"
+            android:name=".Activities.TrackerActivity"
             android:label="TrackerActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ReminderActivity"
+            android:name=".Activities.ReminderActivity"
             android:label="ReminderActivity" />
         <activity
-            android:name=".HospitalActivity"
+            android:name=".Activities.HospitalActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AcitivityGMap"
+            android:name=".Activities.AcitivityGMap"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BootReceiver">
+        <receiver android:name=".Models.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
