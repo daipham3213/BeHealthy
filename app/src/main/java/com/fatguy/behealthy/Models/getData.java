@@ -44,11 +44,13 @@ public class getData {
 
     }
 
-    public JSONgmap getMap() throws JSONException, ExecutionException, InterruptedException {
-        GetDataSync getDataSync = (GetDataSync) new GetDataSync(url).execute();
-        output = getDataSync.get();
-        Log.d(TAG, "getDataContructor: getMap - " + output.getStatus());
-
+    public JSONgmap getMap() throws ExecutionException, InterruptedException {
+        if (checkInternetConnection()) {
+            GetDataSync getDataSync = (GetDataSync) new GetDataSync(url).execute();
+            output = getDataSync.get();
+            output.setResults(getDataSync.results);
+            Log.d(TAG, "getDataContructor: getMap - " + output.getStatus());
+        }
         return output;
     }
 

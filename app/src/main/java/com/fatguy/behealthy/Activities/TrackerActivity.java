@@ -13,24 +13,22 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
 import com.fatguy.behealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.database.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.GregorianCalendar;
 
 public class TrackerActivity extends Activity implements SensorEventListener {
     private IconRoundCornerProgressBar step_chart;
@@ -68,6 +66,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         percent =findViewById(R.id.tracker_txtPercent);
         loadData();
         reset_chart();
+        loadWeeklyData();
     }
 
 
@@ -135,7 +134,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
 
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
                 if (snapshot.hasChild(d2s))
                 {
                     counted[0] = (long) snapshot.child(d2s).child("counted").getValue();
@@ -162,11 +161,21 @@ public class TrackerActivity extends Activity implements SensorEventListener {
             }
 
             @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            public void onCancelled(@NotNull DatabaseError error) {
 
             }
         });
+    }
 
+    private void loadWeeklyData(){
+        int month = Calendar.getInstance().get(Calendar.MONTH);
+        int day = Calendar.getInstance().get(Calendar.DATE);
+        int year =  Calendar.getInstance().get(Calendar.YEAR);
+
+        Calendar cal= new GregorianCalendar();
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        System.out.println("Start of this week:       " + cal.getTime());
+        System.out.println("... in milliseconds:      " + cal.getTimeInMillis());
 
     }
 
@@ -177,5 +186,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         number.setText((total_step - prev_step) + " / " + target);
         step_chart.setProgress(percent);
     }
+
+
 
 }

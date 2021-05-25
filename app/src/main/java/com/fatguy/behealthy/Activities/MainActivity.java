@@ -79,18 +79,7 @@ public class MainActivity extends AppCompatActivity  {
 
         Date date = Calendar.getInstance().getTime();
         d2s = dateFormat.format(date);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-        {
-
-            return;
-        }
-
         Initial_Main();
-
 
     }
 
@@ -136,7 +125,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onStart() {
         super.onStart();
-
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACTIVITY_RECOGNITION}, 1);
     }
 
     protected void render_main(){

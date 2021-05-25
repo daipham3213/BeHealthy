@@ -55,20 +55,20 @@ public class HospitalActivity extends Activity {
             Log.d(TAG, "hospitalListInit: getLocation");
             data = new getData(this, longitude, latitude, 1000, "hospital");
             hospitalListInit();
-        } catch (JSONException | InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
 
     }
 
-    private void hospitalListInit() throws JSONException, InterruptedException, ExecutionException {
+    private void hospitalListInit() throws  InterruptedException, ExecutionException, NullPointerException {
         jsonMap = data.getMap();
         if (jsonMap != null)
             if (jsonMap.getStatus() != null) {
                 Log.d(TAG, "hospitalListInit: translateData");
                 int count = jsonMap.counter();
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < count-1; i++) {
                     Log.d(TAG, "onCreate: hospital list +1");
                     results rs = jsonMap.getResults()[i];
                     plus_code pl = rs.getPlus_code();

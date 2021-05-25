@@ -10,6 +10,9 @@ public class JSONgmap {
     }
 
     public JSONgmap() {
+        results = null;
+        status = "";
+        html_attributions = null;
     }
 
     public JSONgmap(String[] html_attributions, com.fatguy.behealthy.Models.gmap.results[] results, String status) {
@@ -32,6 +35,10 @@ public class JSONgmap {
 
     public void setResults(com.fatguy.behealthy.Models.gmap.results[] results) {
         this.results = results;
+    }
+
+    public void setNewResults(int length) {
+        this.results = new results[length];
     }
 
     public String getStatus() {

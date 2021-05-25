@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 public class GetDataSync extends AsyncTask<JSONgmap, Void, JSONgmap> {
     private final String TAG = "GETDataSync";
     JSONObject jsonRoot = null;
-    JSONgmap map = new JSONgmap();
+    JSONgmap map;
     JSONArray res;
     results[] results;
     String url;
@@ -37,29 +37,24 @@ public class GetDataSync extends AsyncTask<JSONgmap, Void, JSONgmap> {
         this.url = url;
     }
 
-    public JSONgmap getOutput() {
-
-        return output;
-    }
-
-
     @Override
     protected JSONgmap doInBackground(JSONgmap... jsonGmaps) {
         try {
             Log.d(TAG, "doInBackground: Started");
             getData();
+            map = new JSONgmap();
             if (jsonRoot != null) {
                 Log.d(TAG, "doInBackground: jsonData is " + jsonRoot.getString("status"));
                 res = jsonRoot.optJSONArray("results");
+                map.setNewResults(res.length());
                 results = new results[res.length()];
                 map.setStatus(jsonRoot.getString("status"));
                 for (int i = 0; i < results.length; i++) {
                     JSONObject resNode = res.getJSONObject(i);
                     results[i] = new results();
                     //Get values
-                    String bstt = resNode.getString("business_status");
-                    if (bstt != null)
-                        results[i].setBusiness_status(bstt);
+                    if (!resNode.isNull("business_status"))
+                        results[i].setBusiness_status(resNode.getString("business_status"));
                     results[i].setName(resNode.getString("name"));
                     results[i].setPlace_id(resNode.getString("place_id"));
                     results[i].setVicinity(resNode.getString("vicinity"));
