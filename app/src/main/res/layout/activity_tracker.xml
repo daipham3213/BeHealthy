@@ -24,18 +24,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="700dp">
+            android:layout_height="wrap_content">
 
 
             <com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
                 android:id="@+id/tracker_chart"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/animateToEnd"
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
                 app:rcBackgroundColor="#0A000000"
                 app:rcBackgroundPadding="2dp"
                 app:rcIconBackgroundColor="#00796B"
@@ -87,13 +87,38 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/tracker_weekly_chart"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="350dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="LAST 7 DAYS ACTIVITIES"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tracker_chart" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="TODAY COUNTED STEPS"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/animateToEnd" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
