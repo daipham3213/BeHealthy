@@ -1,26 +1,28 @@
 package com.fatguy.behealthy.Models.C45;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.fatguy.behealthy.R;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.lang.Math;
 
-public class C45 {
+public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
     private Context context;
-
+    private static final String TAG = "C45";
     public C45(Context context) {
         this.context = context;
     }
 
-    public Attribute[] BuildTree() throws IOException {
-        // .csv data sets
+    @Override
+    protected Attribute[] doInBackground(Attribute[]... attribute) {
+        Log.d(TAG, "doInBackground: Start loading data...");
         Scanner scan;
         InputStream is = context.getResources().openRawResource(R.raw.training);
         // start loop for all files HERE
@@ -79,9 +81,15 @@ public class C45 {
 
 
         for(Attribute a : attributes){
-             a.setGain(IofD, totalNumClasses);
+            a.setGain(IofD, totalNumClasses);
         }
         return attributes;
+    }
+
+    @Override
+    protected void onPostExecute(Attribute[] attributes) {
+        super.onPostExecute(attributes);
+        Log.d(TAG, "onPostExecute: Data loaded.");
     }
 
     public static double calcIofD(List<Integer> classesCount){

@@ -11,8 +11,8 @@ public class Diagnoser {
     public void diagnose(String attr, Attribute[] attrs) {
         List<String> disease = new ArrayList<>();
         List<String> symtoms = new ArrayList<>();
-        disease = findDisease(attr, attrs);
         symtoms.add(attr);
+        disease = findDisease(attr, attrs);
         while (disease.size() > 1) {
             for (int i = 0; i < attrs.length; i++) {
                 int pos=0;
@@ -26,6 +26,7 @@ public class Diagnoser {
 //                    String ans = scan.nextLine();
 //                    if (ans.equals("1")) {
 //                        disease = temp;
+//                        symtoms = systoms.add(attrs[i].name);
 //                    }
                 }
                 if (disease.size() == 1) break;

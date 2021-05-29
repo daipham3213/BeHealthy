@@ -20,6 +20,7 @@ import com.fatguy.behealthy.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 
 public class DiagnoseFragment extends Fragment {
@@ -33,7 +34,7 @@ public class DiagnoseFragment extends Fragment {
     private static final String TAG = "DiagnoseFragment";
     private  Attribute[] attrs;
 
-    private void initData() {
+    private void initData() throws ExecutionException, InterruptedException {
         mImg = new int[]{R.drawable.ic_oxygen,R.drawable.ic_hurted_finger_with_bandage,R.drawable.ic_men_silhouette,R.drawable.ic_lungs_silhouette,
                 R.drawable.ic_anorexia,R.drawable.ic_anorexia,R.drawable.ic_stomach_shape,R.mipmap.ic_anorexia_w_foreground,R.drawable.ic_pregnancy,R.drawable.ic_stethoscope};
         mDes.add("Do you tired?");
@@ -49,15 +50,12 @@ public class DiagnoseFragment extends Fragment {
         mContent = new int[]{R.array.diag_tired, R.array.diag_pain, R.array.diag_bodypart, R.array.diag_breathing, R.array.diag_anorexia, R.array.diag_loseweight,
                 R.array.diag_digestion, R.array.diag_skin_color, R.array.diag_pregnant, R.array.diag_categorize};
 
-        C45 tree = new C45(getContext());
-        try {
-            attrs = tree.BuildTree();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        attrs = new C45(getContext()).execute(attrs).get();
+
+
         Log.d(TAG, "initData: ");
-        Diagnoser doctor = new Diagnoser();
-        doctor.diagnose("itching",attrs);
+        //Diagnoser doctor = new Diagnoser();
+        //doctor.diagnose("itching",attrs);
     }
 
     public DiagnoseFragment(Context context) {
@@ -79,7 +77,13 @@ public class DiagnoseFragment extends Fragment {
         // Inflate the layout for this fragment
         root =  inflater.inflate(R.layout.fragment_diagnose, container, false);
         recyclerView = root.findViewById(R.id.doctor_recycler);
-        initData();
+        try {
+            initData();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         DiagItemAdapter adapter = new DiagItemAdapter(mImg,mDes,mContent,context);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
