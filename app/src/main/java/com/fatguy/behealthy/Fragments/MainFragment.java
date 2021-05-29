@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
+import com.fatguy.behealthy.Activities.HeartRateMonitor;
 import com.fatguy.behealthy.Activities.HospitalActivity;
 import com.fatguy.behealthy.Activities.ReminderActivity;
 import com.fatguy.behealthy.Activities.TrackerActivity;
@@ -22,6 +23,7 @@ public class MainFragment extends Fragment {
     private ImageView Tracker;
     private ImageView Reminder;
     private ImageView Hospital;
+    private ImageView Heart;
 
     private final String TAG ="MainActivity";
 
@@ -68,13 +70,22 @@ public class MainFragment extends Fragment {
                 render_hosptal();
             }
         });
-
+        Heart = root.findViewById(R.id.btnHeartrate);
+        Heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                render_heartmonitor();
+            }
+        });
 
         return root;
     }
 
     private void render_hosptal() {
         startActivity(new Intent(getActivity(), HospitalActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+    private void render_heartmonitor() {
+        startActivity(new Intent(getActivity(), HeartRateMonitor.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     private void render_reminder() {
@@ -89,7 +100,7 @@ public class MainFragment extends Fragment {
         DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
         TopBarDiagFragment topFrag = new TopBarDiagFragment();
         getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
-        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).addToBackStack(TAG).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
     }
     protected  void render_tracker() {
         startActivity(new Intent(getActivity(), TrackerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

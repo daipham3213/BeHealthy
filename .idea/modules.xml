@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BeHealthy.iml" filepath="$PROJECT_DIR$/.idea/modules/BeHealthy.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BeHealthy.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BeHealthy.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/heartrate-monitor/BeHealthy.app.heartrate-monitor.iml" filepath="$PROJECT_DIR$/.idea/modules/app/heartrate-monitor/BeHealthy.app.heartrate-monitor.iml" />
     </modules>
   </component>
 </project>

@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/activity_tracker"
                     android:padding="10dp"
-                    android:src="@drawable/ic_calculator" />
+                    android:src="@drawable/ic_tracker" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -154,8 +154,16 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
+                app:cardBackgroundColor="@color/md_red_100"
                 app:cardCornerRadius="15dp">
 
+                <ImageView
+                    android:id="@+id/btnHeartrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/activity_tracker"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_heartbeat" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView

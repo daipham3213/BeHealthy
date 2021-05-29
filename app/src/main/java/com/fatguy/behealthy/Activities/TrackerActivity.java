@@ -172,7 +172,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     progress(8000, 0);
                     prev_step = total_step;
                     counted[0] = 0;
-                    progress(target[0], counted[0]);
+                    progress(8000, 0);
                     Log.d(TAG, "Reseted");
                     saveData(0);
                 }
