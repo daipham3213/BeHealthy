@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Updating_user_profile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/register" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="409dp"
+            android:layout_height="520dp">
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/reg_txtNameUp"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:layout_marginTop="24dp"
+                        android:ems="10"
+                        android:hint="Name"
+                        android:inputType="textPersonName"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/reg_txtEmailUp"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:layout_marginTop="11dp"
+                        android:ems="10"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textPersonName|textEmailSubject"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/reg_txtNameUp" />
+
+
+                    <EditText
+                        android:id="@+id/reg_txtDateUp"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:layout_marginTop="9dp"
+                        android:editable="false"
+                        android:ems="10"
+                        android:hint="Date of birth"
+                        android:inputType="date"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/reg_txtEmailUp" />
+
+                    <EditText
+                        android:id="@+id/reg_txtWeightUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:ems="10"
+                        android:hint="Measure as Kg"
+                        android:inputType="textPersonName" />
+
+                    <EditText
+                        android:id="@+id/reg_txtHeightUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:ems="10"
+                        android:hint="Measure as cm"
+                        android:inputType="textPersonName" />
+
+                    <Spinner
+                        android:id="@+id/reg_spn_sexUp"
+                        android:layout_width="300dp"
+                        android:layout_height="45dp"
+                        android:layout_margin="10dp"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/reg_txtDateUp" />
+
+                    <Button
+                        android:id="@+id/reg_btnUpdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="120dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_marginBottom="300dp"
+                        android:background="@color/md_teal_300"
+                        android:text="Update"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/reg_spn_sexUp" />
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
