@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity  {
     String d2s;
     private Intent mainIntent;
 
+    public static String email;
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
     private final BroadcastReceiver screen = new BroadcastReceiver() {
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity  {
 
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
                 }
             });
 

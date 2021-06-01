@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class RegisterActivity extends Activity {
+
     private EditText edtDate;
     private Spinner spnSex;
     private EditText Name;
@@ -91,6 +92,7 @@ public class RegisterActivity extends Activity {
                 float h = Float.parseFloat(height.getText().toString());
 
                 String date = "";
+
                 date = edtDate.getText().toString();
                 String year = edtDate.getText().toString();
                 year = year.substring(year.lastIndexOf("-")+1);
