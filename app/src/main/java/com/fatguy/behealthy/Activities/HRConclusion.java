@@ -33,6 +33,15 @@ public class HRConclusion extends Activity {
     private CardView state_card;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
+    String[] adivce = {"Your heart rate is too week!\n" +
+            "You should take the consultation from doctor.",
+            "Your hear rate is normal.\n" +
+                    "You should always aim to take good care of your heart. This includes doing things like exercising regularly, eating a heart-healthy diet, and maintaining a healthy weight.",
+            "Your Heart rate is too HIGH!\n" +
+                    "- Make sure your surroundings are cool and comfortable. High temperatures and humidity can increase blood flow and heart rate.\n" +
+                    "- Emotional upset can raise your heart rate. Slow, measured breathing can help bring it back down.\n" +
+                    "- If you’re going from sitting to standing, make sure to rise slowly. Standing up too quickly can bring about dizziness and cause your heart rate to increase."
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,23 +79,26 @@ public class HRConclusion extends Activity {
     private void initData(String BPM) {
         int beats = Integer.valueOf(BPM);
 
+
         if (beats < 60) {
             bpm_chart.setProgressColor(colors[0]);
+            recommend.setText(adivce[0]);
             state.setText("Low");
             state_card.setCardBackgroundColor(colors[0]);
         } else if (beats < 100) {
             bpm_chart.setProgressColor(colors[1]);
+            recommend.setText(adivce[1]);
             state_card.setCardBackgroundColor(colors[1]);
             state.setText("Normal");
         } else {
             bpm_chart.setProgressColor(colors[2]);
+            recommend.setText(adivce[2]);
             state_card.setCardBackgroundColor(colors[2]);
             state.setText("High");
         }
 
         bpm_chart.setMax(120);
         bpm_chart.setProgress(beats);
-        bpm_chart.setSecondaryProgress(beats * 1.1f);
         bpm_chart.invalidate();
     }
 }
