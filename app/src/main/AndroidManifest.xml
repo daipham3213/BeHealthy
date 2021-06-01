@@ -39,7 +39,7 @@
             android:label="RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activities.Forgot_password_Activity"
+            android:name=".Activities.ForgotPasswordActivity"
             android:label="Forgot_password_Activity"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -50,7 +50,10 @@
             android:name=".Activities.ReminderActivity"
             android:label="ReminderActivity" />
         <activity
-            android:name=".Activities.Updating_user_profile"
+            android:name=".Activities.UpdatingUserProfile"
+            android:label="Updating_user_profile" />
+        <activity
+            android:name=".Activities.HRConclusion"
             android:label="Updating_user_profile" />
         <activity
             android:name=".Activities.HospitalActivity"

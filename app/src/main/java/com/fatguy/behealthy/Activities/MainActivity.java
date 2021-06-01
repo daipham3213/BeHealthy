@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +33,7 @@ import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private final FragmentManager mng = getSupportFragmentManager();
     private FirebaseAuth mAuth;
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity  {
                 endTimer = System.currentTimeMillis();
                 screenTime = endTimer - startTimer;
 
-                if(screenOnTimeSingle > TIME_ERROR) {
+                if (screenOnTimeSingle > TIME_ERROR) {
                     screenTime = screenTime + screenOnTimeSingle;
                     Log.d(TAG, "Screen time: " + screenTime);
                 }
@@ -85,28 +84,24 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    public void Initial_Main()
-    {
+    public void Initial_Main() {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null)
-        {
+        if (currentUser == null) {
             LoginActivity login = new LoginActivity(mAuth);
             this.finish();
-            mainIntent =new Intent(MainActivity.this, login.getClass())
+            mainIntent = new Intent(MainActivity.this, login.getClass())
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(mainIntent);
-        }
-        else {
+        } else {
             mRef = mRef.child("Reminder").child(mAuth.getUid()).child("ScreenTime").child("OnScreen");
 
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                    if (snapshot.hasChild(d2s)){
+                    if (snapshot.hasChild(d2s)) {
                         screenTimeDB = (long) snapshot.child(d2s).getValue();
-                    }
-                    else mRef.child(d2s).setValue(0);
+                    } else mRef.child(d2s).setValue(0);
                 }
 
                 @Override
@@ -125,15 +120,21 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onStart() {
         super.onStart();
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACTIVITY_RECOGNITION}, 1);
+        ActivityCompat.requestPermissions(this, new String[]
+                        {Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_NETWORK_STATE,
+                                Manifest.permission.ACTIVITY_RECOGNITION,
+                                Manifest.permission.CAMERA},
+                1);
     }
 
-    protected void render_main(){
+    protected void render_main() {
         MainFragment mf = new MainFragment();
         View view = mf.getRoot();
         TopBarMainFragment tf = new TopBarMainFragment();
-        mng.beginTransaction().replace(R.id.layoutMain,mf,mf.getTag()).commit();
-        mng.beginTransaction().replace(R.id.layout_top_nav,tf,tf.getTag()).commit();
+        mng.beginTransaction().replace(R.id.layoutMain, mf, mf.getTag()).commit();
+        mng.beginTransaction().replace(R.id.layout_top_nav, tf, tf.getTag()).commit();
     }
 
     @Override

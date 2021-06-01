@@ -3,6 +3,7 @@ package com.fatguy.behealthy.Activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import com.akexorcist.roundcornerprogressbar.indeterminate.IndeterminateCenteredRoundCornerProgressBar;
 import com.fatguy.behealthy.Models.ImageProcessing;
 import com.fatguy.behealthy.R;
-import com.github.mikephil.charting.charts.PieChart;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,9 +43,9 @@ public class HeartRateMonitor extends Activity {
     @SuppressLint("StaticFieldLeak")
     private static TextView text = null;
     @SuppressLint("StaticFieldLeak")
-    private static TextView imgavgtxt = null;
+    private static final TextView imgavgtxt = null;
     @SuppressLint("StaticFieldLeak")
-    private static TextView rollavgtxt = null;
+    private static final TextView rollavgtxt = null;
     public IndeterminateCenteredRoundCornerProgressBar progess_chart;
     private static ImageView btnNext;
 
@@ -54,83 +54,7 @@ public class HeartRateMonitor extends Activity {
     private static int averageIndex = 0;
     private static final int averageArraySize = 4;
     private static final int[] averageArray = new int[averageArraySize];
-
-    public static enum TYPE {
-        GREEN, RED
-    };
-
-    private static TYPE currentType = TYPE.GREEN;
-
-    public static TYPE getCurrent() {
-        return currentType;
-    }
-
-    private static int beatsIndex = 0;
-    private static final int beatsArraySize = 3;
-    private static final int[] beatsArray = new int[beatsArraySize];
-    private static double beats = 0;
-    private static long startTime = 0;
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressLint("InvalidWakeLockTag")
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_heart_motitor);
-
-        SurfaceView preview = (SurfaceView) findViewById(R.id.preview);
-        previewHolder = preview.getHolder();
-        previewHolder.addCallback(surfaceCallback);
-
-        btnNext = findViewById(R.id.heart_btnNext);
-        image = findViewById(R.id.heart_beat_img);
-        text = findViewById(R.id.heart_bpm);
-        progess_chart = findViewById(R.id.heart_chart);
-
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "DoNotDimScreen");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        wakeLock.acquire(10*60*1000L /*10 minutes*/);
-
-        camera = Camera.open();
-
-        startTime = System.currentTimeMillis();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        wakeLock.release();
-
-        camera.setPreviewCallback(null);
-        camera.stopPreview();
-        camera.release();
-        camera = null;
-    }
-
-    private static PreviewCallback previewCallback = new PreviewCallback() {
+    private static final PreviewCallback previewCallback = new PreviewCallback() {
 
         /**
          * {@inheritDoc}
@@ -214,7 +138,7 @@ public class HeartRateMonitor extends Activity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                text.setText(String.valueOf(beatsAvg)+" bpm");
+                text.setText(beatsAvg + " bpm");
                 btnNext.setVisibility(View.VISIBLE);
                 startTime = System.currentTimeMillis();
                 beats = 0;
@@ -223,7 +147,18 @@ public class HeartRateMonitor extends Activity {
         }
     };
 
-    private static SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+    private static TYPE currentType = TYPE.GREEN;
+
+    public static TYPE getCurrent() {
+        return currentType;
+    }
+
+    private static int beatsIndex = 0;
+    private static final int beatsArraySize = 3;
+    private static final int[] beatsArray = new int[beatsArraySize];
+    private static double beats = 0;
+    private static long startTime = 0;
+    private static final SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
 
         /**
          * {@inheritDoc}
@@ -262,6 +197,77 @@ public class HeartRateMonitor extends Activity {
             // Ignore
         }
     };
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
+
+        camera = Camera.open();
+
+        startTime = System.currentTimeMillis();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        wakeLock.release();
+
+        camera.setPreviewCallback(null);
+        camera.stopPreview();
+        camera.release();
+        camera = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressLint("InvalidWakeLockTag")
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_heart_motitor);
+
+        SurfaceView preview = findViewById(R.id.preview);
+        previewHolder = preview.getHolder();
+        previewHolder.addCallback(surfaceCallback);
+
+        btnNext = findViewById(R.id.heart_btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent conclusion = new Intent(HeartRateMonitor.this, HRConclusion.class);
+                conclusion.putExtra("BPM", text.getText().toString());
+                startActivity(conclusion);
+            }
+        });
+        image = findViewById(R.id.heart_beat_img);
+        text = findViewById(R.id.heart_bpm);
+        progess_chart = findViewById(R.id.heart_chart);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, "DoNotDimScreen");
+    }
+
+    public enum TYPE {
+        GREEN, RED
+    }
 
     private static Camera.Size getSmallestPreviewSize(int width, int height, Camera.Parameters parameters) {
         Camera.Size result = null;

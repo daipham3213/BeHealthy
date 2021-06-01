@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 
 import com.fatguy.behealthy.Activities.UpdatingUserProfile;
 import com.fatguy.behealthy.R;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class TopBarMainFragment extends Fragment {
     private View root;
@@ -35,8 +34,8 @@ public class TopBarMainFragment extends Fragment {
         Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getContext(), UpdatingUserProfile.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                //FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getContext(), UpdatingUserProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
         return root;
