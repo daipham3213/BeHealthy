@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     String d2s;
     private Intent mainIntent;
+    ImageView avatar;
+
+
 
     public static String email;
 
@@ -76,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startTimer = System.currentTimeMillis();
+
+//        ImagleProfile imagleProfile = new ImagleProfile();
+//        imagleProfile.imagleAvatar(avatar);
 
         Date date = Calendar.getInstance().getTime();
         d2s = dateFormat.format(date);

@@ -50,6 +50,9 @@
             android:name=".Activities.ReminderActivity"
             android:label="ReminderActivity" />
         <activity
+            android:name=".Activities.ImagleProfile"
+            android:label="ImagleProfile" />
+        <activity
             android:name=".Activities.UpdatingUserProfile"
             android:label="Updating_user_profile" />
         <activity
