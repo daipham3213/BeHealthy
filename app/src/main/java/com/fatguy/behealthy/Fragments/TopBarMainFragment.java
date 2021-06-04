@@ -95,6 +95,7 @@ public class TopBarMainFragment extends Fragment {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+
                 Glide.with(getContext()).load(uri).into(av);;
             }
         });
