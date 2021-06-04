@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.fatguy.behealthy.Activities.ImagleProfile;
 import com.fatguy.behealthy.Activities.LoginActivity;
 import com.fatguy.behealthy.Activities.UpdatingUserProfile;
@@ -94,7 +95,7 @@ public class TopBarMainFragment extends Fragment {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(av);
+                Glide.with(getContext()).load(uri).into(av);;
             }
         });
     }

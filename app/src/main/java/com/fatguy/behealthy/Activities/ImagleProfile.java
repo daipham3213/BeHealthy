@@ -1,4 +1,4 @@
-package com.fatguy.behealthy.Activities;
+﻿package com.fatguy.behealthy.Activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.anstrontechnologies.corehelper.AnstronCoreHelper;
+import com.bumptech.glide.Glide;
 import com.fatguy.behealthy.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -170,7 +171,9 @@ public class ImagleProfile extends Activity {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(av);
+
+               // Picasso.get().load(uri).into(av);
+                Glide.with(getApplicationContext()).load(uri).into(av);
             }
         });
     }
