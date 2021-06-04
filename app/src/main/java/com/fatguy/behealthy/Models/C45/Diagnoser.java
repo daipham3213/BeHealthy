@@ -17,6 +17,7 @@ public class Diagnoser {
         while (disease.size() > 1) {
             for (int i = 0; i < attrs.length; i++) {
                 int pos=0;
+                getDigaois(attrs[i].values.get(0).valueName);
                 if (attrs[i].values.get(0).valueName.equals("1"))
                     pos = 0;
                 else pos = 1;
