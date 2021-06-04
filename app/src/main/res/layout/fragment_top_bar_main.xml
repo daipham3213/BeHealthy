@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:padding="2dp"
     tools:context=".Fragments.TopBarMainFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="90dp">
@@ -36,8 +37,8 @@
                 android:layout_marginStart="10dp"
                 app:cardCornerRadius="20dp">
 
-                 <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/btnAvatar"
+                <ImageView
+                    android:id="@+id/btnAvatar"
                     android:layout_width="88dp"
                     android:layout_height="match_parent"
                     android:layout_margin="2dp"
