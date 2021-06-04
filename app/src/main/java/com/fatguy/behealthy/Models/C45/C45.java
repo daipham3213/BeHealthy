@@ -1,9 +1,12 @@
 package com.fatguy.behealthy.Models.C45;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fatguy.behealthy.Activities.HospitalActivity;
 import com.fatguy.behealthy.R;
 
 import java.io.InputStream;
@@ -11,15 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
+public class C45 extends AsyncTask<Void, Void, Attribute[]> {
     private final Context context;
     private static final String TAG = "C45";
+    private ProgressDialog progDailog;
+
     public C45(Context context) {
         this.context = context;
     }
 
     @Override
-    public Attribute[] doInBackground(Attribute[]... attribute) {
+    public Attribute[] doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground: Start loading data...");
         Scanner scan;
         InputStream is = context.getResources().openRawResource(R.raw.training);
@@ -29,7 +34,7 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         String[] headers = headerLine.split(",");
 
         // class index is assumed to be the last column
-        int classIndex    = headers.length - 1;
+        int classIndex = headers.length - 1;
         int numAttributes = headers.length - 1;
 
         // store data set attributes
@@ -78,16 +83,33 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         double IofD = calcIofD(classesCount); // Set information criteria
 
 
-        for(Attribute a : attributes){
+        for (Attribute a : attributes) {
             a.setGain(IofD, totalNumClasses);
         }
         return attributes;
     }
 
     @Override
-    protected void onPostExecute(Attribute[] attributes) {
-        super.onPostExecute(attributes);
-        Log.d(TAG, "onPostExecute: Data loaded.");
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progDailog = new ProgressDialog(context);
+        progDailog.setMessage("Loading...");
+        progDailog.setIndeterminate(false);
+        progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDailog.setCancelable(true);
+        progDailog.show();
+    }
+
+    @Override
+    protected void onPostExecute(Attribute[] attribute) {
+        super.onPostExecute(attribute);
+        if (progDailog.isShowing()) {
+            progDailog.dismiss();
+        }
+        Log.d(TAG, "onPostExecute: Done");
+        Intent start_hospital = new Intent(context, HospitalActivity.class);
+        start_hospital.putExtra("attrs", attribute);
+        context.startActivity(start_hospital);
     }
 
     public static double calcIofD(List<Integer> classesCount){

@@ -1,9 +1,10 @@
 package com.fatguy.behealthy.Models.C45;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Diagnoser {
+public class Diagnoser implements Serializable {
 
 
     public Diagnoser() {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.StartDiagnosis">
+    tools:context=".Activities.StartDiagnose">
 
     <AutoCompleteTextView
         android:id="@+id/diaggonsis_autotxt_input"

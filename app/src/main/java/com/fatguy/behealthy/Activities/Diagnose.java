@@ -1,28 +1,27 @@
 package com.fatguy.behealthy.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.fatguy.behealthy.Models.C45.C45;
 import com.fatguy.behealthy.Models.C45.Diagnoser;
 import com.fatguy.behealthy.R;
 
-public class Diaggonsis extends AppCompatActivity {
+public class Diagnose extends AppCompatActivity {
     TextView bot;
     TextView user;
     Button Yes;
     Button No;
-    void set()
-    {
-        bot =findViewById(R.id.Diaggonsi_txt_Bot) ;
-        user=findViewById(R.id.Diaggonsi_txt_user);
-        Yes=findViewById(R.id.Diaggonsi_btn_yes);
-        No  =findViewById(R.id.Diaggonsi_btn_No) ;
+
+    void set() {
+        bot = findViewById(R.id.Diaggonsi_txt_Bot);
+        user = findViewById(R.id.Diaggonsi_txt_user);
+        Yes = findViewById(R.id.Diaggonsi_btn_yes);
+        No = findViewById(R.id.Diaggonsi_btn_No);
 
     }
     static String BotChat= "Hello\n\n";

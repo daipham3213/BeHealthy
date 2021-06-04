@@ -1,18 +1,19 @@
 package com.fatguy.behealthy.Models.C45;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Attribute {
-    public String       name   = new String();
+public class Attribute implements Serializable {
+    public String name = "";
     public List<Values> values = new ArrayList<Values>();
-    public double       gain   = 0.0;
+    public double gain = 0.0;
 
-    public Attribute(String name){
+    public Attribute(String name) {
         this.name = name;
     }
 
-    public void setGain(double IofD, int totalNumClasses){
+    public void setGain(double IofD, int totalNumClasses) {
         int totalValClasses = 0;
         double temp = 0.0;
         for(Values v : values){
@@ -42,7 +43,7 @@ public class Attribute {
     }
 
     public String toString(){
-        String out = new String("attribute: " + this.name + "\n");
+        String out = "attribute: " + this.name + "\n";
         for(Values v : values){
             out += "\tvalue: " + v.valueName + ", ";
             out += "\n\t\tclasses: ";

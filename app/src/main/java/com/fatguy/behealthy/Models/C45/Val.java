@@ -1,17 +1,17 @@
 package com.fatguy.behealthy.Models.C45;
 
-public class Val {
-    public String valueName = "";
-    public String itClass   = "";
+import java.io.Serializable;
 
-    public Val(String name, String inClass){
-        this.valueName = new String(name);
-        this.itClass   = new String(inClass);
+public class Val implements Serializable {
+    public String valueName = "";
+    public String itClass = "";
+
+    public Val(String name, String inClass) {
+        this.valueName = name;
+        this.itClass = inClass;
     }
 
-    public boolean isNameEqual(Val inV){
-        if(this.valueName.equals(inV.valueName))
-            return true;
-        return false;
+    public boolean isNameEqual(Val inV) {
+        return this.valueName.equals(inV.valueName);
     }
 }

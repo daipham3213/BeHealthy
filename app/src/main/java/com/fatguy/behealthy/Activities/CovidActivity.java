@@ -22,7 +22,7 @@ public class CovidActivity extends AppCompatActivity {
 
     private void initData() {
         Intent i = getIntent();
-        Covid19 data = (Covid19) i.getSerializableExtra("data");
+        data = (Covid19) i.getSerializableExtra("data");
         Log.d(TAG, "initData: Done" + data);
     }
 }
