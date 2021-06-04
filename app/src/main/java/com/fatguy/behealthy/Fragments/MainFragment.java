@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.fatguy.behealthy.Activities.HeartRateMonitor;
 import com.fatguy.behealthy.Activities.ReminderActivity;
+import com.fatguy.behealthy.Activities.StartDiagnose;
 import com.fatguy.behealthy.Activities.TrackerActivity;
 import com.fatguy.behealthy.Models.Covid.getData;
 import com.fatguy.behealthy.Models.LatLng;
@@ -130,8 +131,7 @@ public class MainFragment extends Fragment {
     }
     protected void render_diagnose()
     {
-        DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
-        getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
+        startActivity(new Intent(getActivity(), StartDiagnose.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
     protected  void render_tracker() {
         startActivity(new Intent(getActivity(), TrackerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

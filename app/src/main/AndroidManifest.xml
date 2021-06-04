@@ -68,6 +68,9 @@
             android:name=".Activities.HRConclusion"
             android:label="Updating_user_profile" />
         <activity
+            android:name=".Activities.StartDiagnose"
+            android:label="Start Diagnose" />
+        <activity
             android:name=".Activities.HospitalActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />

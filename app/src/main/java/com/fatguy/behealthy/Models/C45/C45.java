@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.fatguy.behealthy.Activities.HospitalActivity;
+import com.fatguy.behealthy.Activities.Diagnose;
 import com.fatguy.behealthy.R;
 
 import java.io.InputStream;
@@ -107,9 +107,9 @@ public class C45 extends AsyncTask<Void, Void, Attribute[]> {
             progDailog.dismiss();
         }
         Log.d(TAG, "onPostExecute: Done");
-        Intent start_hospital = new Intent(context, HospitalActivity.class);
-        start_hospital.putExtra("attrs", attribute);
-        context.startActivity(start_hospital);
+        Intent start_diag = new Intent(context, Diagnose.class);
+        start_diag.putExtra("attrs", attribute);
+        context.startActivity(start_diag);
     }
 
     public static double calcIofD(List<Integer> classesCount){
