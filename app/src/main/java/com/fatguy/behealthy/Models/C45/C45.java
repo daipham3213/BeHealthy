@@ -21,7 +21,7 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
     }
 
     @Override
-    protected Attribute[] doInBackground(Attribute[]... attribute) {
+    public Attribute[] doInBackground(Attribute[]... attribute) {
         Log.d(TAG, "doInBackground: Start loading data...");
         Scanner scan;
         InputStream is = context.getResources().openRawResource(R.raw.training);

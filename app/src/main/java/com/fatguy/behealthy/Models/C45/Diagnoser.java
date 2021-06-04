@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Diagnoser {
 
+
     public Diagnoser() {
     }
 
@@ -59,5 +60,8 @@ public class Diagnoser {
             }
         }
         return rs;
+    }
+    public String  getDigaois(String a){
+        return a;
     }
 }

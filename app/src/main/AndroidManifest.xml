@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fatguy.behealthy">
+
     <permission
         android:name="com.fatguy.behealthy.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="your.package.name.permission.MAPS_RECEIVE"/>
+
+    <uses-permission android:name="your.package.name.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,10 +15,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.flash"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +29,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".Activities.Diaggonsis"></activity>
+        <activity android:name=".Activities.StartDiagnosis" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -39,25 +45,12 @@
             android:label="RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activities.ForgotPasswordActivity"
-            android:label="Forgot_password_Activity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".Activities.TrackerActivity"
             android:label="TrackerActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activities.ReminderActivity"
             android:label="ReminderActivity" />
-        <activity
-            android:name=".Activities.ImagleProfile"
-            android:label="ImagleProfile" />
-        <activity
-            android:name=".Activities.UpdatingUserProfile"
-            android:label="Updating_user_profile" />
-        <activity
-            android:name=".Activities.HRConclusion"
-            android:label="Updating_user_profile" />
         <activity
             android:name=".Activities.HospitalActivity"
             android:label="@string/title_activity_login"

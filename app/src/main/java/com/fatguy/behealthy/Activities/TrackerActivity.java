@@ -79,7 +79,6 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         mAuth = FirebaseAuth.getInstance();
         mData = FirebaseDatabase.getInstance();
         mRef = mData.getReference().child("StepCounter").child(mAuth.getUid()); //link to Step table of current user of today
-
         step_chart = findViewById(R.id.tracker_chart);
         number =findViewById(R.id.tracker_txtProgess);
         percent =findViewById(R.id.tracker_txtPercent);
@@ -206,7 +205,6 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                         }
                         date = date.plusDays(1);
                     }
-
                     BarDataSet bardataset = new BarDataSet(weekly_data, "Daily record");
                     BarDataSet days = new BarDataSet(date_data, "Date");
                     bardataset.setColors(ColorTemplate.LIBERTY_COLORS);
@@ -219,9 +217,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     desc.setText("Weekly counted step");
                     week_chart.setDescription(desc);
                     week_chart.invalidate();
-
                 }
-
 
                 @Override
                 public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {

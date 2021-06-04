@@ -21,13 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends Activity {
-    private TextView btnRegister, btnForgotPass;
+    private TextView btnRegister;
     private Button Login;
-    private  EditText Email;
+    private EditText Email;
     private EditText Pass;
     private final FirebaseAuth mAuth;
     private final String TAG = "LoginActivity";
-
 
     public LoginActivity(FirebaseAuth mAuth) {
         this.mAuth = mAuth;
@@ -49,16 +48,6 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(LoginActivity.this, registerActivity.getClass()));
             }
         });
-
-        btnForgotPass = findViewById(R.id.login_btnForgotPass);
-
-        btnForgotPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-            }
-        });
-
         Login = findViewById(R.id.login_btnLogin);
         Email = findViewById(R.id.login_txtEmail);
         Pass = findViewById(R.id.login_txtPassword);
@@ -67,7 +56,6 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 signIn(Email.getText().toString(),Pass.getText().toString());
-                MainActivity.email = Email.getText().toString();
             }
         });
     }
@@ -85,6 +73,7 @@ public class LoginActivity extends Activity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "loginUserWithEmail:failure", task.getException());
+
                             Toast.makeText(LoginActivity.this,
                                     "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
@@ -99,7 +88,4 @@ public class LoginActivity extends Activity {
             this.finish();
             startActivity(new Intent(LoginActivity.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
-
-
-
 }

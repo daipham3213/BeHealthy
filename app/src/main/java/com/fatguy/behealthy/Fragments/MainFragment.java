@@ -9,9 +9,11 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
+import com.fatguy.behealthy.Activities.Diaggonsis;
 import com.fatguy.behealthy.Activities.HeartRateMonitor;
 import com.fatguy.behealthy.Activities.HospitalActivity;
 import com.fatguy.behealthy.Activities.ReminderActivity;
+import com.fatguy.behealthy.Activities.StartDiagnosis;
 import com.fatguy.behealthy.Activities.TrackerActivity;
 import com.fatguy.behealthy.R;
 
@@ -97,10 +99,11 @@ public class MainFragment extends Fragment {
     }
     protected void render_diagnose()
     {
-        DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
-        TopBarDiagFragment topFrag = new TopBarDiagFragment();
-        getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
-        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
+        startActivity(new Intent(getActivity(), StartDiagnosis.class));
+//        DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
+//        TopBarDiagFragment topFrag = new TopBarDiagFragment();
+//        getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
+//        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
     }
     protected  void render_tracker() {
         startActivity(new Intent(getActivity(), TrackerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
