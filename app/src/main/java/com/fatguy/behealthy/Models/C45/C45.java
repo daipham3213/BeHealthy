@@ -3,7 +3,6 @@ package com.fatguy.behealthy.Models.C45;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fatguy.behealthy.R;
 
@@ -11,10 +10,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.lang.Math;
 
 public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
-    private Context context;
+    private final Context context;
     private static final String TAG = "C45";
     public C45(Context context) {
         this.context = context;
@@ -28,14 +26,14 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         // start loop for all files HERE
         scan = new Scanner(is);
         String headerLine = scan.nextLine();
-        String headers[]  = headerLine.split(",");
+        String[] headers = headerLine.split(",");
 
         // class index is assumed to be the last column
         int classIndex    = headers.length - 1;
         int numAttributes = headers.length - 1;
 
         // store data set attributes
-        Attribute attributes[] = new Attribute[numAttributes];
+        Attribute[] attributes = new Attribute[numAttributes];
         for(int x = 0; x < numAttributes; x++) {
             attributes[x] = new Attribute(headers[x]);
         }
@@ -49,7 +47,7 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         while(scan.hasNextLine()){
             Val data = null;
             String inLine = scan.nextLine();
-            String lineData[] = inLine.split(",");
+            String[] lineData = inLine.split(",");
 
             // insert class into classes List
             if(classes.isEmpty()){

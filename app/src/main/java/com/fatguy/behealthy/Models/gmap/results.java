@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class results {
+import java.io.Serializable;
+
+public class results implements Serializable {
     private String business_status;
     private geometry geometry;
     private String icon;
@@ -10,7 +12,7 @@ public class results {
     private double rating;
     private String reference;
     private String scope;
-    private String [] type;
+    private String[] type;
     private int user_ratings_total;
     private String vicinity;
     private opening_hours opening_hours;

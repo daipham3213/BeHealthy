@@ -10,10 +10,15 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 
 import com.fatguy.behealthy.Activities.HeartRateMonitor;
-import com.fatguy.behealthy.Activities.HospitalActivity;
 import com.fatguy.behealthy.Activities.ReminderActivity;
 import com.fatguy.behealthy.Activities.TrackerActivity;
+import com.fatguy.behealthy.Models.Covid.getData;
+import com.fatguy.behealthy.Models.LatLng;
+import com.fatguy.behealthy.Models.Utils;
+import com.fatguy.behealthy.Models.getMap;
 import com.fatguy.behealthy.R;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class MainFragment extends Fragment {
@@ -24,6 +29,7 @@ public class MainFragment extends Fragment {
     private ImageView Reminder;
     private ImageView Hospital;
     private ImageView Heart;
+    private ImageView Covid;
 
     private final String TAG ="MainActivity";
 
@@ -67,7 +73,13 @@ public class MainFragment extends Fragment {
         Hospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                render_hosptal();
+                try {
+                    render_hosptal();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
         Heart = root.findViewById(R.id.btnHeartrate);
@@ -77,13 +89,34 @@ public class MainFragment extends Fragment {
                 render_heartmonitor();
             }
         });
+        Covid = root.findViewById(R.id.btnCovid);
+        Covid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    render_covid();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         return root;
     }
 
-    private void render_hosptal() {
-        startActivity(new Intent(getActivity(), HospitalActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    private void render_covid() throws ExecutionException, InterruptedException {
+        getData task = new getData(null, getContext());
+        task.getStatistic();
     }
+
+    private void render_hosptal() throws ExecutionException, InterruptedException {
+        LatLng loc = Utils.getCurrLocation(getContext());
+        getMap task = new getMap(getContext(), loc.getLatitude(), loc.getLongitude(), 1000, "hospital");
+        task.getMap();
+    }
+
     private void render_heartmonitor() {
         startActivity(new Intent(getActivity(), HeartRateMonitor.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
@@ -98,9 +131,7 @@ public class MainFragment extends Fragment {
     protected void render_diagnose()
     {
         DiagnoseFragment mainFrag = new DiagnoseFragment(getContext());
-        TopBarDiagFragment topFrag = new TopBarDiagFragment();
         getParentFragmentManager().beginTransaction().replace(R.id.layoutMain,mainFrag,mainFrag.getTag()).addToBackStack(TAG).commit();
-        getParentFragmentManager().beginTransaction().replace(R.id.layout_top_nav,topFrag,topFrag.getTag()).commit();
     }
     protected  void render_tracker() {
         startActivity(new Intent(getActivity(), TrackerActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

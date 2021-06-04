@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -22,7 +21,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 public class TopBarMainFragment extends Fragment {
     private View root;
@@ -96,7 +94,7 @@ public class TopBarMainFragment extends Fragment {
             @Override
             public void onSuccess(Uri uri) {
 
-                Glide.with(getContext()).load(uri).into(av);;
+                Glide.with(getContext()).load(uri).into(av);
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class geometry {
+import java.io.Serializable;
+
+public class geometry implements Serializable {
     private northeast location;
     private viewport viewport;
 

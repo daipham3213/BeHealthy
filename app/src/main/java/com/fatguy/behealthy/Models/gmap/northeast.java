@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class northeast {
+import java.io.Serializable;
+
+public class northeast implements Serializable {
     private double lat;
     private double lng;
 

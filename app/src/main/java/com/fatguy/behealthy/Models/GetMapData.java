@@ -1,8 +1,12 @@
 package com.fatguy.behealthy.Models;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fatguy.behealthy.Activities.HospitalActivity;
 import com.fatguy.behealthy.Models.gmap.JSONgmap;
 import com.fatguy.behealthy.Models.gmap.geometry;
 import com.fatguy.behealthy.Models.gmap.northeast;
@@ -24,7 +28,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class GetDataSync extends AsyncTask<JSONgmap, Void, JSONgmap> {
+public class GetMapData extends AsyncTask<String, Void, JSONgmap> {
     private final String TAG = "GETDataSync";
     JSONObject jsonRoot = null;
     JSONgmap map;
@@ -32,14 +36,17 @@ public class GetDataSync extends AsyncTask<JSONgmap, Void, JSONgmap> {
     results[] results;
     String url;
     JSONgmap output = new JSONgmap();
+    private final Context context;
+    private ProgressDialog progDailog;
 
-    public GetDataSync(String url) {
-        this.url = url;
+    public GetMapData(Context context) {
+        this.context = context;
     }
 
     @Override
-    protected JSONgmap doInBackground(JSONgmap... jsonGmaps) {
+    protected JSONgmap doInBackground(String... url) {
         try {
+            this.url = url[0];
             Log.d(TAG, "doInBackground: Started");
             getData();
             map = new JSONgmap();
@@ -105,9 +112,26 @@ public class GetDataSync extends AsyncTask<JSONgmap, Void, JSONgmap> {
 
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progDailog = new ProgressDialog(context);
+        progDailog.setMessage("Loading...");
+        progDailog.setIndeterminate(false);
+        progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDailog.setCancelable(true);
+        progDailog.show();
+    }
+
+    @Override
     protected void onPostExecute(JSONgmap map) {
         super.onPostExecute(map);
-        output = map;
+        if (progDailog.isShowing()) {
+            progDailog.dismiss();
+        }
+        Log.d(TAG, "onPostExecute: " + map.getStatus());
+        Intent start_hospital = new Intent(context, HospitalActivity.class);
+        start_hospital.putExtra("gmap", map);
+        context.startActivity(start_hospital);
     }
 
 

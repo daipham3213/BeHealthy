@@ -12,13 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fatguy.behealthy.Adapters.DiagItemAdapter;
-
 import com.fatguy.behealthy.Models.C45.Attribute;
 import com.fatguy.behealthy.Models.C45.C45;
-import com.fatguy.behealthy.Models.C45.Diagnoser;
 import com.fatguy.behealthy.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
