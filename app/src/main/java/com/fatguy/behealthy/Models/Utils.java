@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -137,5 +139,15 @@ public class Utils {
             d2s = dateTime.format(date);
         } else d2s = dateOnly.format(date);
         return d2s;
+    }
+
+    public static String[] Format2Read(String[] a) {
+        for (int i = 0; i < a.length; i++) {
+            String s = a[i];
+            s = StringUtils.capitalize(s);
+            s = StringUtils.replaceChars(s, "_", " ");
+            a[i] = s;
+        }
+        return a;
     }
 }

@@ -16,10 +16,13 @@ import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Diagnose extends AppCompatActivity {
     private static final String TAG = "Diagnose";
@@ -81,10 +84,12 @@ public class Diagnose extends AppCompatActivity {
         diagnose(first_symptom, attributes, 0);
     }
 
-    public void diagnose(String symptom, Attribute[] attrs, int p) {
+    public void diagnose(String symptom, @NotNull Attribute[] attrs, int p) {
         if (p >= attrs.length) return;
         if (disease.size() == 1) {
             adapter.addMessage("You may caught: " + disease.get(0), Utils.dateFormat(1), true);
+            adapter.addMessage(getDesc(disease.get(0)), Utils.dateFormat(1), true);
+            adapter.addMessage("Precaution: \n" + getPre(disease.get(0)), Utils.dateFormat(1), true);
             btnYes.setClickable(false);
             btnNo.setClickable(false);
             return;
@@ -97,6 +102,40 @@ public class Diagnose extends AppCompatActivity {
         } else diagnose(symptom, attrs, ++curr_i);
     }
 
+    public String getDesc(String disease) {
+        Scanner scan;
+        InputStream is = getResources().openRawResource(R.raw.symptom_description);
+        // start loop for all files HERE
+        scan = new Scanner(is);
+        String[] line = scan.nextLine().split(",");
+        while (scan.hasNext() & !line[0].equals(disease)) {
+            line = scan.nextLine().split(",");
+        }
+        StringBuilder desc = new StringBuilder();
+        Utils.Format2Read(line);
+        for (int i = 1; i < line.length; i++) {
+            desc.append(line[i]).append("\n");
+        }
+        return desc.toString();
+    }
+
+    public String getPre(String disease) {
+        Scanner scan;
+        InputStream is = getResources().openRawResource(R.raw.symptom_precaution);
+        // start loop for all files HERE
+        scan = new Scanner(is);
+        String[] line = scan.nextLine().split(",");
+        while (scan.hasNext() & !line[0].equals(disease)) {
+            line = scan.nextLine().split(",");
+        }
+        StringBuilder precaution = new StringBuilder();
+        Utils.Format2Read(line);
+        for (int i = 1; i < line.length; i++) {
+            precaution.append("- ").append(line[i]).append("\n");
+        }
+        return precaution.toString();
+    }
+
     public void dataFilter(List<String> temp, String name, boolean is_yes) {
         if (is_yes) {
             adapter.addMessage("Yes", Utils.dateFormat(1), false);
@@ -107,7 +146,7 @@ public class Diagnose extends AppCompatActivity {
         }
     }
 
-    public List<String> findDisease(String symptoms, Attribute[] attrs) {
+    public List<String> findDisease(String symptoms, @NotNull Attribute[] attrs) {
         int pos = 0;
         List<String> disease = new ArrayList<>();
         for (Attribute item : attrs) {
@@ -120,7 +159,7 @@ public class Diagnose extends AppCompatActivity {
         return disease;
     }
 
-    public List<String> filterDisease(List<String> list1, List<String> list2) {
+    public List<String> filterDisease(@NotNull List<String> list1, List<String> list2) {
         List<String> rs = new ArrayList<>();
         for (String name : list1) {
             if (list2.contains(name)) {
@@ -130,7 +169,7 @@ public class Diagnose extends AppCompatActivity {
         return rs;
     }
 
-    public int getPos(Attribute attribute) {
+    public int getPos(@NotNull Attribute attribute) {
         int pos = 0;
         if (attribute.values.get(0).valueName.equals("1"))
             pos = 0;

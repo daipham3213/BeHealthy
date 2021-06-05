@@ -11,9 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fatguy.behealthy.Models.C45.C45;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
-
-import org.apache.commons.lang3.StringUtils;
 
 
 public class StartDiagnose extends AppCompatActivity {
@@ -54,7 +53,7 @@ public class StartDiagnose extends AppCompatActivity {
         Toast.makeText(StartDiagnose.this, "Hello", Toast.LENGTH_SHORT).show();
         Button start = findViewById(R.id.diagnosis_btn_start);
         AutoCompleteTextView auto = findViewById(R.id.diagnosis_autotxt_input);
-        symptoms = Format(symptoms);
+        symptoms = Utils.Format2Read(symptoms);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, symptoms);
         auto.setAdapter(adapter);
 
@@ -75,14 +74,4 @@ public class StartDiagnose extends AppCompatActivity {
         });
     }
 
-
-    public String[] Format(String[] a) {
-        for (int i = 0; i < a.length; i++) {
-            String s = a[i];
-            s = StringUtils.capitalize(s);
-            s = StringUtils.replaceChars(s, "_", " ");
-            a[i] = s;
-        }
-        return a;
-    }
 }

@@ -33,11 +33,12 @@ public class HRConclusion extends Activity {
     private CardView state_card;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
-    String[] adivce = {"Your heart rate is too week!\n" +
-            "You should take the consultation from doctor.",
-            "Your hear rate is normal.\n" +
-                    "You should always aim to take good care of your heart. This includes doing things like exercising regularly, eating a heart-healthy diet, and maintaining a healthy weight.",
-            "Your Heart rate is too HIGH!\n" +
+    String[] adivce = {"\t Your heart rate is too week!\n" +
+            "- You should take the consultation from doctor.",
+            "\t Your hear rate is normal.\n" +
+                    "- You should always aim to take good care of your heart. \n" +
+                    "- This includes doing things like exercising regularly, eating a heart-healthy diet, and maintaining a healthy weight.",
+            "\t Your Heart rate is too HIGH!\n" +
                     "- Make sure your surroundings are cool and comfortable. High temperatures and humidity can increase blood flow and heart rate.\n" +
                     "- Emotional upset can raise your heart rate. Slow, measured breathing can help bring it back down.\n" +
                     "- If you’re going from sitting to standing, make sure to rise slowly. Standing up too quickly can bring about dizziness and cause your heart rate to increase."
