@@ -1,2 +1,3 @@
 rootProject.name = "BeHealthy"
 include ':app'
+include ':app:heartrate-monitor'

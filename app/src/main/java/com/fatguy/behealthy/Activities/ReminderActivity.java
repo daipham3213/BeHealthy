@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
 import com.fatguy.behealthy.Adapters.TimeStampAdapter;
 import com.fatguy.behealthy.Models.User;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,10 +35,8 @@ import com.suke.widget.SwitchButton;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
@@ -60,13 +59,11 @@ public class ReminderActivity extends Activity {
     int hourStart = 7;
     int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
-
+    private String d2s;
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
     NotificationCompat.Builder water_notify;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    String d2s;
 
 
     @Override
@@ -77,9 +74,9 @@ public class ReminderActivity extends Activity {
         swtWater = findViewById(R.id.reminder_swtWater);
         spnScreen = findViewById(R.id.reminder_spnScreen);
         spnWater = findViewById(R.id.reminder_spnWater);
-        Date date = Calendar.getInstance().getTime();
-        d2s = dateFormat.format(date);
         waterBar = findViewById(R.id.reminder_water_chart);
+
+        d2s = Utils.dateFormat(0);
 
         createNotificationChannel();
 

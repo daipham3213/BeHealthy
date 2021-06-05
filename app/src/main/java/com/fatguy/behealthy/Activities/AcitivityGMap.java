@@ -32,7 +32,6 @@ public class AcitivityGMap extends AppCompatActivity {
 
     public AcitivityGMap(){}
 
-
     public AcitivityGMap(String name, String address, Double rate, String Status, Double lat, Double lng) {
         AcitivityGMap.name = name;
         AcitivityGMap.address = address;

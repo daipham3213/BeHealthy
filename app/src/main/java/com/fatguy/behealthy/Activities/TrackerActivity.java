@@ -18,16 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,20 +35,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.database.annotations.Nullable;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class TrackerActivity extends Activity implements SensorEventListener {
     private IconRoundCornerProgressBar step_chart;
     private FirebaseDatabase mData;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private SensorManager sensorManager = null;
     private long total_step = 0;
     private long prev_step = 0;
@@ -72,14 +66,12 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         //get today
         setContentView(R.layout.activity_tracker);
-        Date date = Calendar.getInstance().getTime();
-        d2s = dateFormat.format(date);
+        d2s = Utils.dateFormat(0);
         //init var
         sensorManager  = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAuth = FirebaseAuth.getInstance();
         mData = FirebaseDatabase.getInstance();
         mRef = mData.getReference().child("StepCounter").child(mAuth.getUid()); //link to Step table of current user of today
-
         step_chart = findViewById(R.id.tracker_chart);
         number =findViewById(R.id.tracker_txtProgess);
         percent =findViewById(R.id.tracker_txtPercent);
@@ -206,7 +198,6 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                         }
                         date = date.plusDays(1);
                     }
-
                     BarDataSet bardataset = new BarDataSet(weekly_data, "Daily record");
                     BarDataSet days = new BarDataSet(date_data, "Date");
                     bardataset.setColors(ColorTemplate.LIBERTY_COLORS);
@@ -219,9 +210,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     desc.setText("Weekly counted step");
                     week_chart.setDescription(desc);
                     week_chart.invalidate();
-
                 }
-
 
                 @Override
                 public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {

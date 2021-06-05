@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class plus_code {
+import java.io.Serializable;
+
+public class plus_code implements Serializable {
     private String compound_code;
     private String global_code;
 

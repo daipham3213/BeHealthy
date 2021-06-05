@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class JSONgmap {
+import java.io.Serializable;
+
+public class JSONgmap implements Serializable {
     private String[] html_attributions;
     private results[] results;
     private String status;

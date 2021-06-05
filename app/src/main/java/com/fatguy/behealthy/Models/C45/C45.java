@@ -1,41 +1,46 @@
 package com.fatguy.behealthy.Models.C45;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.fatguy.behealthy.Activities.Diagnose;
 import com.fatguy.behealthy.R;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.lang.Math;
 
-public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
-    private Context context;
+public class C45 extends AsyncTask<Void, Void, Attribute[]> {
+    private final Context context;
     private static final String TAG = "C45";
-    public C45(Context context) {
+    private ProgressDialog progDailog;
+    private final String selection;
+
+    public C45(Context context, String selection) {
         this.context = context;
+        this.selection = selection;
     }
 
     @Override
-    protected Attribute[] doInBackground(Attribute[]... attribute) {
+    public Attribute[] doInBackground(Void... voids) {
         Log.d(TAG, "doInBackground: Start loading data...");
         Scanner scan;
         InputStream is = context.getResources().openRawResource(R.raw.training);
         // start loop for all files HERE
         scan = new Scanner(is);
         String headerLine = scan.nextLine();
-        String headers[]  = headerLine.split(",");
+        String[] headers = headerLine.split(",");
 
         // class index is assumed to be the last column
-        int classIndex    = headers.length - 1;
+        int classIndex = headers.length - 1;
         int numAttributes = headers.length - 1;
 
         // store data set attributes
-        Attribute attributes[] = new Attribute[numAttributes];
+        Attribute[] attributes = new Attribute[numAttributes];
         for(int x = 0; x < numAttributes; x++) {
             attributes[x] = new Attribute(headers[x]);
         }
@@ -49,7 +54,7 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         while(scan.hasNextLine()){
             Val data = null;
             String inLine = scan.nextLine();
-            String lineData[] = inLine.split(",");
+            String[] lineData = inLine.split(",");
 
             // insert class into classes List
             if(classes.isEmpty()){
@@ -80,16 +85,34 @@ public class C45 extends AsyncTask<Attribute[], Void,  Attribute[]> {
         double IofD = calcIofD(classesCount); // Set information criteria
 
 
-        for(Attribute a : attributes){
+        for (Attribute a : attributes) {
             a.setGain(IofD, totalNumClasses);
         }
         return attributes;
     }
 
     @Override
-    protected void onPostExecute(Attribute[] attributes) {
-        super.onPostExecute(attributes);
-        Log.d(TAG, "onPostExecute: Data loaded.");
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progDailog = new ProgressDialog(context);
+        progDailog.setMessage("Loading...");
+        progDailog.setIndeterminate(false);
+        progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDailog.setCancelable(true);
+        progDailog.show();
+    }
+
+    @Override
+    protected void onPostExecute(Attribute[] attribute) {
+        super.onPostExecute(attribute);
+        if (progDailog.isShowing()) {
+            progDailog.dismiss();
+        }
+        Log.d(TAG, "onPostExecute: Done");
+        Intent start_diag = new Intent(context, Diagnose.class);
+        start_diag.putExtra("selection", selection);
+        start_diag.putExtra("attrs", attribute);
+        context.startActivity(start_diag);
     }
 
     public static double calcIofD(List<Integer> classesCount){

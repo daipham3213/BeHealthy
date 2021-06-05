@@ -1,6 +1,8 @@
 package com.fatguy.behealthy.Models.gmap;
 
-public class opening_hours {
+import java.io.Serializable;
+
+public class opening_hours implements Serializable {
     private boolean open_now;
 
     public opening_hours(boolean open_now) {

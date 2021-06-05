@@ -2,7 +2,6 @@ package com.fatguy.behealthy.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +28,7 @@ public class HRConclusion extends Activity {
     private TextView state;
     private TextView recommend;
     private IconRoundCornerProgressBar bpm_chart;
+    private int[] colors;
     private Button done;
     private CardView state_card;
     private FirebaseAuth mAuth;
@@ -50,6 +50,7 @@ public class HRConclusion extends Activity {
 
         BPM = getIntent().getStringExtra("BPM");
         BPM = BPM.substring(0, BPM.indexOf(" "));
+        colors = new int[]{R.color.md_amber_200, R.color.md_teal_200, R.color.md_red_300};
         Date date = Calendar.getInstance().getTime();
         d2s = dateFormat.format(date);
 
@@ -71,27 +72,31 @@ public class HRConclusion extends Activity {
                 startActivity(new Intent(HRConclusion.this, MainActivity.class));
             }
         });
+
+
     }
 
     private void initData(String BPM) {
         int beats = Integer.valueOf(BPM);
 
+
         if (beats < 60) {
-            bpm_chart.setProgressColor(Color.parseColor("#FFE082"));
+            bpm_chart.setProgressColor(colors[0]);
             recommend.setText(adivce[0]);
             state.setText("Low");
-            state_card.setCardBackgroundColor(Color.parseColor("#FFE082"));
+            state_card.setCardBackgroundColor(colors[0]);
         } else if (beats < 100) {
-            bpm_chart.setProgressColor(Color.parseColor("#80CBC4"));
+            bpm_chart.setProgressColor(colors[1]);
             recommend.setText(adivce[1]);
-            state_card.setCardBackgroundColor(Color.parseColor("#80CBC4"));
+            state_card.setCardBackgroundColor(colors[1]);
             state.setText("Normal");
         } else {
-            bpm_chart.setProgressColor(Color.parseColor("#E57373"));
+            bpm_chart.setProgressColor(colors[2]);
             recommend.setText(adivce[2]);
-            state_card.setCardBackgroundColor(Color.parseColor("#E57373"));
+            state_card.setCardBackgroundColor(colors[2]);
             state.setText("High");
         }
+
         bpm_chart.setMax(120);
         bpm_chart.setProgress(beats);
         bpm_chart.invalidate();

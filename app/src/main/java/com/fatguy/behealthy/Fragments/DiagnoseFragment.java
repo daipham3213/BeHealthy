@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fatguy.behealthy.Adapters.DiagItemAdapter;
-
 import com.fatguy.behealthy.Models.C45.Attribute;
-import com.fatguy.behealthy.Models.C45.C45;
-import com.fatguy.behealthy.Models.C45.Diagnoser;
 import com.fatguy.behealthy.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -49,9 +45,6 @@ public class DiagnoseFragment extends Fragment {
         mDes.add("Can you categorize your symptoms");
         mContent = new int[]{R.array.diag_tired, R.array.diag_pain, R.array.diag_bodypart, R.array.diag_breathing, R.array.diag_anorexia, R.array.diag_loseweight,
                 R.array.diag_digestion, R.array.diag_skin_color, R.array.diag_pregnant, R.array.diag_categorize};
-
-        attrs = new C45(getContext()).execute(attrs).get();
-
 
         Log.d(TAG, "initData: ");
         //Diagnoser doctor = new Diagnoser();
