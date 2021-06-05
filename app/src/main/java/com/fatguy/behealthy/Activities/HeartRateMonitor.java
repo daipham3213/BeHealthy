@@ -3,6 +3,7 @@ package com.fatguy.behealthy.Activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -165,6 +166,14 @@ public class HeartRateMonitor extends Activity {
         previewHolder.addCallback(surfaceCallback);
 
         btnNext = findViewById(R.id.heart_btnNext);
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent HRC = new Intent(HeartRateMonitor.this, HRConclusion.class);
+                HRC.putExtra("BPM", text.getText().toString());
+                startActivity(HRC.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
         image = findViewById(R.id.heart_beat_img);
         text = findViewById(R.id.heart_bpm);
         progess_chart = findViewById(R.id.heart_chart);

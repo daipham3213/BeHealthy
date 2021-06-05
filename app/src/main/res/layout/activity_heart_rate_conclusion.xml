@@ -88,7 +88,6 @@
         app:rcBackgroundPadding="2dp"
         app:rcIconBackgroundColor="@color/md_teal_400"
         app:rcIconSize="30dp"
-        app:rcIconSrc="@drawable/ic_heart"
         app:rcMax="100"
         app:rcProgress="40"
         app:rcRadius="10dp" />

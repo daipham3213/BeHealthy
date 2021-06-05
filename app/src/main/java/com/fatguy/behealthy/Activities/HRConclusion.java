@@ -80,16 +80,19 @@ public class HRConclusion extends Activity {
 
         if (beats < 60) {
             bpm_chart.setProgressColor(Color.parseColor("#FFE082"));
+            bpm_chart.setIconBackgroundColor(Color.parseColor("#FFE082"));
             recommend.setText(adivce[0]);
             state.setText("Low");
             state_card.setCardBackgroundColor(Color.parseColor("#FFE082"));
         } else if (beats < 100) {
             bpm_chart.setProgressColor(Color.parseColor("#80CBC4"));
+            bpm_chart.setIconBackgroundColor(Color.parseColor("#80CBC4"));
             recommend.setText(adivce[1]);
             state_card.setCardBackgroundColor(Color.parseColor("#80CBC4"));
             state.setText("Normal");
         } else {
             bpm_chart.setProgressColor(Color.parseColor("#E57373"));
+            bpm_chart.setIconBackgroundColor(Color.parseColor("#E57373"));
             recommend.setText(adivce[2]);
             state_card.setCardBackgroundColor(Color.parseColor("#E57373"));
             state.setText("High");
