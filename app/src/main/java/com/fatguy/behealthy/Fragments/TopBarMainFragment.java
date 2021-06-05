@@ -76,7 +76,9 @@ public class TopBarMainFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menuLogout:
-                        startActivity(new Intent(getContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        startActivity(new Intent(getContext(), LoginActivity.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;
                     case R.id.menuUpdate:
                         startActivity(new Intent(getContext(), UpdatingUserProfile.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
