@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -34,19 +35,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.database.annotations.Nullable;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class TrackerActivity extends Activity implements SensorEventListener {
     private IconRoundCornerProgressBar step_chart;
     private FirebaseDatabase mData;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private SensorManager sensorManager = null;
     private long total_step = 0;
     private long prev_step = 0;
@@ -69,8 +66,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         //get today
         setContentView(R.layout.activity_tracker);
-        Date date = Calendar.getInstance().getTime();
-        d2s = dateFormat.format(date);
+        d2s = Utils.dateFormat(0);
         //init var
         sensorManager  = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAuth = FirebaseAuth.getInstance();

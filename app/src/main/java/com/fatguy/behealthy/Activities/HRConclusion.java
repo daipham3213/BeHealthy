@@ -11,17 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
 import com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 public class HRConclusion extends Activity {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy  hh:mm");
-    String d2s;
+
     private String BPM;
     private TextView date_time;
     private TextView bpm;
@@ -51,8 +47,7 @@ public class HRConclusion extends Activity {
         BPM = getIntent().getStringExtra("BPM");
         BPM = BPM.substring(0, BPM.indexOf(" "));
         colors = new int[]{R.color.md_amber_200, R.color.md_teal_200, R.color.md_red_300};
-        Date date = Calendar.getInstance().getTime();
-        d2s = dateFormat.format(date);
+
 
         date_time = findViewById(R.id.hrc_date_time);
         state = findViewById(R.id.hrc_state);
@@ -63,7 +58,7 @@ public class HRConclusion extends Activity {
         bpm = findViewById(R.id.hrc_bpm);
 
         bpm.setText(BPM);
-        date_time.setText(d2s);
+        date_time.setText(Utils.dateFormat(1));
         initData(BPM);
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +72,7 @@ public class HRConclusion extends Activity {
     }
 
     private void initData(String BPM) {
-        int beats = Integer.valueOf(BPM);
+        int beats = Integer.parseInt(BPM);
 
 
         if (beats < 60) {

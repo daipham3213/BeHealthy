@@ -18,9 +18,11 @@ public class C45 extends AsyncTask<Void, Void, Attribute[]> {
     private final Context context;
     private static final String TAG = "C45";
     private ProgressDialog progDailog;
+    private final String selection;
 
-    public C45(Context context) {
+    public C45(Context context, String selection) {
         this.context = context;
+        this.selection = selection;
     }
 
     @Override
@@ -108,6 +110,7 @@ public class C45 extends AsyncTask<Void, Void, Attribute[]> {
         }
         Log.d(TAG, "onPostExecute: Done");
         Intent start_diag = new Intent(context, Diagnose.class);
+        start_diag.putExtra("selection", selection);
         start_diag.putExtra("attrs", attribute);
         context.startActivity(start_diag);
     }

@@ -71,6 +71,9 @@
             android:name=".Activities.StartDiagnose"
             android:label="Start Diagnose" />
         <activity
+            android:name=".Activities.Diagnose"
+            android:label="Diagnosing" />
+        <activity
             android:name=".Activities.HospitalActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />

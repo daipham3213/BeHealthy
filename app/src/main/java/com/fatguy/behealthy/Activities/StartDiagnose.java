@@ -52,8 +52,8 @@ public class StartDiagnose extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_diagnosis);
         Toast.makeText(StartDiagnose.this, "Hello", Toast.LENGTH_SHORT).show();
-        Button start = findViewById(R.id.diaggonsis_btn_start);
-        AutoCompleteTextView auto = findViewById(R.id.diaggonsis_autotxt_input);
+        Button start = findViewById(R.id.diagnosis_btn_start);
+        AutoCompleteTextView auto = findViewById(R.id.diagnosis_autotxt_input);
         symptoms = Format(symptoms);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, symptoms);
         auto.setAdapter(adapter);
@@ -68,7 +68,7 @@ public class StartDiagnose extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (selection != "") {
-                    new C45(StartDiagnose.this).execute();
+                    new C45(StartDiagnose.this, selection).execute();
                 } else
                     Toast.makeText(StartDiagnose.this, "Please enter your symptom first", Toast.LENGTH_SHORT).show();
             }

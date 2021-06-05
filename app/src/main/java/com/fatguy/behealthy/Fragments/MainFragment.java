@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    render_hosptal();
+                    render_hospital();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class MainFragment extends Fragment {
         Heart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                render_heartmonitor();
+                render_heart_monitor();
             }
         });
         Covid = root.findViewById(R.id.btnCovid);
@@ -112,13 +112,13 @@ public class MainFragment extends Fragment {
         task.getStatistic();
     }
 
-    private void render_hosptal() throws ExecutionException, InterruptedException {
+    private void render_hospital() throws ExecutionException, InterruptedException {
         LatLng loc = Utils.getCurrLocation(getContext());
         getMap task = new getMap(getContext(), loc.getLatitude(), loc.getLongitude(), 1000, "hospital");
         task.getMap();
     }
 
-    private void render_heartmonitor() {
+    private void render_heart_monitor() {
         startActivity(new Intent(getActivity(), HeartRateMonitor.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
