@@ -15,20 +15,26 @@ import com.fatguy.behealthy.Models.C45.Attribute;
 import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Diagnose extends AppCompatActivity {
     private static final String TAG = "Diagnose";
-    List<String> disease;
-    List<String> symptoms = new ArrayList<>();
     MessageAdapter adapter;
     private TextView btnYes;
     private TextView btnNo;
     private RecyclerView chat_box;
     private String first_symptom;
     private Attribute[] attributes;
+    private final List<String> symptoms = new ArrayList<>();
+    private final boolean is_yes = false;
+    List<String> temp;
+    String name;
+    private int curr_i = 0;
+    private List<String> disease;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +43,24 @@ public class Diagnose extends AppCompatActivity {
         initData();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        diagnose(first_symptom, attributes);
-    }
-
     public void initData() {
         btnYes = findViewById(R.id.chat_btnYes);
-
         btnNo = findViewById(R.id.chat_btnNo);
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataFilter(temp, name, true);
+                diagnose(symptoms.get(symptoms.size() - 1), attributes, ++curr_i);
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dataFilter(temp, name, false);
+                diagnose(symptoms.get(symptoms.size() - 1), attributes, ++curr_i);
+            }
+        });
+
         chat_box = findViewById(R.id.chat_box);
         Intent diag_data = getIntent();
         adapter = new MessageAdapter();
@@ -55,42 +69,42 @@ public class Diagnose extends AppCompatActivity {
 
         attributes = (Attribute[]) diag_data.getSerializableExtra("attrs");
         first_symptom = diag_data.getStringExtra("selection");
+        first_symptom = Format(first_symptom);
         Log.d(TAG, "initData: Done");
+        disease = findDisease(first_symptom, attributes);
+        symptoms.add(first_symptom);
     }
 
-    public void diagnose(String attr, Attribute[] attrs) {
-        symptoms.add(attr);
-        disease = findDisease(attr, attrs);
-        for (Attribute attribute : attrs) {
-            List<String> temp = filterDisease(disease, attribute.values.get(getPos(attribute)).classes);
-            if (!temp.isEmpty()) {
-                String name = attribute.name;
-                //Add question
-                adapter.addMessage("Do you have " + name + "? ", Utils.dateFormat(1), true);
-                //Add answer
-                final boolean[] is_click = {false};
-                while (!is_click[0]) {
-                    btnYes.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            adapter.addMessage("Yes", Utils.dateFormat(1), false);
-                            disease = temp;
-                            symptoms.add(name);
-                            is_click[0] = true;
-                        }
-                    });
-                    btnNo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            adapter.addMessage("No", Utils.dateFormat(1), false);
-                            is_click[0] = true;
-                        }
-                    });
-                }
-            }
-            if (disease.size() == 1) break;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        diagnose(first_symptom, attributes, 0);
+    }
+
+    public void diagnose(String symptom, Attribute[] attrs, int p) {
+        if (p >= attrs.length) return;
+        if (disease.size() == 1) {
+            adapter.addMessage("You may caught: " + disease.get(0), Utils.dateFormat(1), true);
+            btnYes.setClickable(false);
+            btnNo.setClickable(false);
+            return;
         }
-        adapter.addMessage("You may caught: " + disease.get(0), Utils.dateFormat(1), true);
+        temp = filterDisease(disease, attrs[p].values.get(getPos(attrs[p])).classes);
+        if (temp.size() > 0) {
+            name = attrs[p].name;
+            //Add question
+            adapter.addMessage("Do you have " + name + "? ", Utils.dateFormat(1), true);
+        } else diagnose(symptom, attrs, ++curr_i);
+    }
+
+    public void dataFilter(List<String> temp, String name, boolean is_yes) {
+        if (is_yes) {
+            adapter.addMessage("Yes", Utils.dateFormat(1), false);
+            disease = temp;
+            symptoms.add(name);
+        } else {
+            adapter.addMessage("No", Utils.dateFormat(1), false);
+        }
     }
 
     public List<String> findDisease(String symptoms, Attribute[] attrs) {
@@ -120,7 +134,17 @@ public class Diagnose extends AppCompatActivity {
         int pos = 0;
         if (attribute.values.get(0).valueName.equals("1"))
             pos = 0;
-        else pos = 1;
+        else if (attribute.values.size() > 1) {
+            pos = 1;
+        }
         return pos;
     }
+
+
+    public String Format(String str) {
+        str = str.toLowerCase();
+        str = StringUtils.replace(str, " ", "_");
+        return str;
+    }
+
 }
