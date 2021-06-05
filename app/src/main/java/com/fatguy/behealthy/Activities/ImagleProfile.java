@@ -71,6 +71,7 @@ public class ImagleProfile extends Activity {
 
         imagleAvatar(profileImage);
 
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +94,7 @@ public class ImagleProfile extends Activity {
         if(requestCode == 1000){
             if(resultCode == Activity.RESULT_OK){
                 Uri imageUri = data.getData();
+             //   uploadImageToFirebase(imageUri);
                 try {
                     compressAndUplaod(imageUri);
                 } catch (IOException e) {
@@ -101,7 +103,7 @@ public class ImagleProfile extends Activity {
             }
         }
     }
-
+// hàm nén và update avatar lên storage.
     private void compressAndUplaod(Uri pickedImageUri) throws IOException {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -122,6 +124,7 @@ public class ImagleProfile extends Activity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                       //Picasso.get().load(uri).into(profileImage);
                         Glide.with(getApplicationContext()).load(uri).into(profileImage);
                         progressDialog.dismiss();
                         Toast.makeText(ImagleProfile.this, "Change Success", Toast.LENGTH_SHORT).show();
@@ -136,12 +139,40 @@ public class ImagleProfile extends Activity {
         });
         }
 
+// hàm không nén khi update hình lên storage.
+    private void uploadImageToFirebase(Uri imageUri) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        StorageReference fileRef = storageReference.child("User/"+fAuth.getCurrentUser().getUid()+"profile.jpg");
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        progressDialog.dismiss();
+                        Picasso.get().load(uri).into(profileImage);
+                        Toast.makeText(ImagleProfile.this, "Change Success", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(ImagleProfile.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public void imagleAvatar(ImageView av){
         StorageReference profileRef = storageReference.child("User/"+fAuth.getCurrentUser().getUid()+"profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+              //  Picasso.get().load(uri).into(av);
                 Glide.with(getApplicationContext()).load(uri).into(av);
             }
         });
