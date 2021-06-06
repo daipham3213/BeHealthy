@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -19,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.fatguy.behealthy.Fragments.MainFragment;
 import com.fatguy.behealthy.Fragments.TopBarMainFragment;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,10 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -46,14 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private long screenTime = 0;
     private long screenTimeDB = 0;
     private final long TIME_ERROR = 1000;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    String d2s;
     private Intent mainIntent;
-    ImageView avatar;
-
-    public static String email;
-
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+    private String d2s;
+
     private final BroadcastReceiver screen = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -80,12 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startTimer = System.currentTimeMillis();
-
-//        ImagleProfile imagleProfile = new ImagleProfile();
-//        imagleProfile.imagleAvatar(avatar);
-
-        Date date = Calendar.getInstance().getTime();
-        d2s = dateFormat.format(date);
+        d2s = Utils.dateFormat(0);
         Initial_Main();
 
     }

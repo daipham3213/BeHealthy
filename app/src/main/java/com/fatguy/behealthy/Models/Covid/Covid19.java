@@ -16,6 +16,7 @@ public class Covid19 implements Serializable {
         this.recovery = recovery;
         this.die = die;
         this.data = new Data[Integer.parseInt(total)];
+
     }
 
     public String getTotal() {

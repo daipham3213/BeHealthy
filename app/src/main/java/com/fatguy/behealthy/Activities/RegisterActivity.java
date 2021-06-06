@@ -4,14 +4,15 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class RegisterActivity extends Activity {
-    private EditText edtDate;
+    private TextView edtDate;
     private Spinner spnSex;
     private EditText Name;
     private EditText Email;
@@ -63,15 +64,13 @@ public class RegisterActivity extends Activity {
     public void Initial_Register()
     {
         edtDate = findViewById(R.id.reg_txtDate);
-
-        edtDate.setOnTouchListener(new View.OnTouchListener() {
+        edtDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 PickADate();
-                return true;
             }
         });
-        spnSex = (Spinner) findViewById(R.id.reg_spn_sex);
+        spnSex = findViewById(R.id.reg_spn_sex);
         LoadSexList();
         Name = findViewById(R.id.reg_txtName);
         Email = findViewById(R.id.reg_txtEmail);
@@ -95,7 +94,21 @@ public class RegisterActivity extends Activity {
                 String year = edtDate.getText().toString();
                 year = year.substring(year.lastIndexOf("-")+1);
                 Age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(year);
-                signUp(name,email,pass,sex,date,w,h,Age);
+
+
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(sex) || TextUtils.isEmpty(name)  || w == 0 || h == 0)
+                    Toast.makeText(RegisterActivity.this, "Please enter all information", Toast.LENGTH_SHORT).show();
+                else if (pass.length() < 8 || pass.length() > 50)
+                    Toast.makeText(RegisterActivity.this, "Password must have a minimum of 8 characters and a maximum of 50 characters ", Toast.LENGTH_SHORT).show();
+                else if (!sex.equals("Male") || !sex.equals("Female"))
+                    Toast.makeText(RegisterActivity.this, "Please select your gender", Toast.LENGTH_SHORT).show();
+                else if (isValidEmail(email) == false)
+                    Toast.makeText(RegisterActivity.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(RegisterActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
+                        signUp(name,email,pass,sex,date,w,h,Age);
+                }
+
 
             }
         });
@@ -112,15 +125,16 @@ public class RegisterActivity extends Activity {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DATE);
         int month = calendar.get(Calendar.MONTH);
-        int year =  calendar.get(Calendar.YEAR);
+        int year = calendar.get(Calendar.YEAR);
         DatePickerDialog datePickerDialog = new DatePickerDialog(RegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(year,month,dayOfMonth);
+                calendar.set(year, month, dayOfMonth);
                 edtDate.setText(dateFormat.format(calendar.getTime()));
             }
-        },year,month,day);
-        datePickerDialog.show();
+        }, year, month, day);
+        if (!datePickerDialog.isShowing()) datePickerDialog.show();
+
     }
 
     public void signUp(String name, String email, String password,String sex, String date, float weight, float height, int age)
@@ -163,4 +177,13 @@ public class RegisterActivity extends Activity {
             startActivity(new Intent(RegisterActivity.this, login.getClass()));
         }
     }
+
+    public static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
 }
