@@ -55,6 +55,7 @@ public class LoginActivity extends Activity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity.email = Email.getText().toString();
                 signIn(Email.getText().toString(),Pass.getText().toString());
             }
         });

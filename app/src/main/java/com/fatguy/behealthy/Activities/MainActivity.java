@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private Intent mainIntent;
     ImageView avatar;
 
-
-
     public static String email;
 
     private DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
