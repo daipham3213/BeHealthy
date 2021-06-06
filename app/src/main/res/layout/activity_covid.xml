@@ -8,20 +8,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/coivd_view"
-        android:layout_width="334dp"
-        android:layout_height="141dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.263"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/covid_list" />
 
     <ListView
         android:id="@+id/covid_list"
-        android:layout_width="355dp"
-        android:layout_height="78dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
