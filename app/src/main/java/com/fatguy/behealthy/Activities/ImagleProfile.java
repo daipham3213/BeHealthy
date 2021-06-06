@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,6 +22,12 @@ import com.fatguy.behealthy.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,28 +40,39 @@ import java.io.IOException;
 
 public class ImagleProfile extends Activity {
 
-    Button save, close;
-    ImageView profileImage;
-    StorageReference storageReference;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
+    private Button save;
+    private ImageView profileImage;
+    private StorageReference storageReference;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fStore;
+    private Button update;
+    private EditText name, date, height, weight, Email;
 
     AnstronCoreHelper coreHelper;
+    private DatabaseReference reference;
 
-    public ImagleProfile(){}
+    public ImagleProfile() {
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        save = findViewById(R.id.btnSave);
-        close = findViewById(R.id.btnClose);
+        save = findViewById(R.id.btnChangeAvatar);
         profileImage = findViewById(R.id.profile_image);
         coreHelper = new AnstronCoreHelper(this);
 
+        name = findViewById(R.id.update_txtNameUp);
+        update = findViewById(R.id.update_btnUpdate);
+        date = findViewById(R.id.update_txtDateUp);
+        height = findViewById(R.id.update_txtHeightUp);
+        weight = findViewById(R.id.update_txtWeightUp);
+        Email = findViewById(R.id.update_txtEmailUp);
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+
         storageReference = FirebaseStorage.getInstance().getReference();
 
         imagleAvatar(profileImage);
@@ -64,14 +82,59 @@ public class ImagleProfile extends Activity {
             @Override
             public void onClick(View v) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(openGalleryIntent,1000);
+                startActivityForResult(openGalleryIntent, 1000);
             }
         });
 
-        close.setOnClickListener(new View.OnClickListener() {
+        reference = FirebaseDatabase.getInstance().getReference().child("User");
+
+        update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ImagleProfile.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                getData();
+            }
+        });
+
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.child("email").getValue().equals(MainActivity.email)) {
+                        name.setText(ds.child("name").getValue(String.class));
+                        Email.setText(MainActivity.email);
+                        date.setText(ds.child("date").getValue(String.class));
+                        height.setText(ds.child("height").getValue(float.class).toString());
+                        weight.setText(ds.child("weight").getValue(float.class).toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getData() {
+        reference = FirebaseDatabase.getInstance().getReference().child("User");
+        Query query = reference.orderByChild("email").equalTo(MainActivity.email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    String key = ds.getKey();
+                    reference.child(key).child("name").setValue(name.getText().toString().trim());
+                    reference.child(key).child("date").setValue(date.getText().toString().trim());
+                    reference.child(key).child("height").setValue(Float.valueOf(height.getText().toString().trim()));
+                    reference.child(key).child("weight").setValue(Float.valueOf(weight.getText().toString().trim()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+
             }
         });
     }
@@ -79,26 +142,27 @@ public class ImagleProfile extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
                 Uri imageUri = data.getData();
-             //   uploadImageToFirebase(imageUri);
+                //   uploadImageToFirebase(imageUri);
                 try {
-                    compressAndUplaod(imageUri);
+                    compressAndUploaded(imageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
-// hàm nén và update avatar lên storage.
-    private void compressAndUplaod(Uri pickedImageUri) throws IOException {
+
+    // hàm nén và update avatar lên storage.
+    private void compressAndUploaded(Uri pickedImageUri) throws IOException {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
 
-        StorageReference fileRef = storageReference.child("User/"+fAuth.getCurrentUser().getUid()+"profile.jpg");
+        StorageReference fileRef = storageReference.child("User/" + fAuth.getCurrentUser().getUid() + "profile.jpg");
 
         Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), pickedImageUri);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -112,9 +176,10 @@ public class ImagleProfile extends Activity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                       //Picasso.get().load(uri).into(profileImage);
+                        //Picasso.get().load(uri).into(profileImage);
                         Glide.with(getApplicationContext()).load(uri).into(profileImage);
                         progressDialog.dismiss();
+                        save.setBackgroundColor(getResources().getColor(R.color.md_teal_300, null));
                         Toast.makeText(ImagleProfile.this, "Change Success", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -125,16 +190,16 @@ public class ImagleProfile extends Activity {
                 Toast.makeText(ImagleProfile.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show();
             }
         });
-        }
+    }
 
-// hàm không nén khi update hình lên storage.
+    // hàm không nén khi update hình lên storage.
     private void uploadImageToFirebase(Uri imageUri) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
 
-        StorageReference fileRef = storageReference.child("User/"+fAuth.getCurrentUser().getUid()+"profile.jpg");
+        StorageReference fileRef = storageReference.child("User/" + fAuth.getCurrentUser().getUid() + "profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -155,12 +220,12 @@ public class ImagleProfile extends Activity {
         });
     }
 
-    public void imagleAvatar(ImageView av){
-        StorageReference profileRef = storageReference.child("User/"+fAuth.getCurrentUser().getUid()+"profile.jpg");
+    public void imagleAvatar(ImageView av) {
+        StorageReference profileRef = storageReference.child("User/" + fAuth.getCurrentUser().getUid() + "profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-              //  Picasso.get().load(uri).into(av);
+                //  Picasso.get().load(uri).into(av);
                 Glide.with(getApplicationContext()).load(uri).into(av);
             }
         });

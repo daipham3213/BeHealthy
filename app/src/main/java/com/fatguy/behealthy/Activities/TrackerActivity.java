@@ -204,8 +204,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
                     BarData data = new BarData(days,bardataset);
 
                     week_chart.setData(data);
-
-                    week_chart.setFitBars(true);
+                    week_chart.setDrawBarShadow(true);
                     Description desc = new Description();
                     desc.setText("Weekly counted step");
                     week_chart.setDescription(desc);
@@ -227,7 +226,5 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         number.setText((total_step - prev_step) + " / " + target);
         step_chart.setProgress(percent);
     }
-
-
 
 }

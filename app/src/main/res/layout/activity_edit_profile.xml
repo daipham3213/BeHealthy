@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/transparent"
     tools:context=".Activities.ImagleProfile">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -11,52 +12,138 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:src="@drawable/ic_men_silhouette"
         app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="2dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/change_profile_btn"
-        android:layout_below="@+id/profile_image"
-        android:text="Change Profile"
-        android:layout_centerHorizontal="true"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="520dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/change_profile_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btnClose"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Close"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:layout_marginRight="6dp"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:text="Change"
-            android:layout_marginLeft="6dp"
-            android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/update_txtNameUp"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="24dp"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/update_txtEmailUp"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="11dp"
+                    android:ems="10"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textPersonName|textEmailSubject"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/update_txtNameUp" />
 
 
-</RelativeLayout>
+                <EditText
+                    android:id="@+id/update_txtDateUp"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="9dp"
+                    android:editable="false"
+                    android:ems="10"
+                    android:hint="Date of birth"
+                    android:inputType="date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/update_txtEmailUp" />
+
+                <EditText
+                    android:id="@+id/update_txtWeightUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:ems="10"
+                    android:hint="Measure as Kg"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/update_txtHeightUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:ems="10"
+                    android:fontFamily="sans-serif"
+                    android:hint="Measure as cm"
+                    android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/update_spn_sexUp"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/update_txtDateUp" />
+
+                <Button
+                    android:id="@+id/btnChangeAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@color/white_transparent"
+                    android:padding="10dp"
+                    android:text="Chose new profile picture"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/md_grey_500" />
+
+                <Button
+                    android:id="@+id/update_btnUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="120dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="300dp"
+                    android:background="@color/md_teal_300"
+                    android:text="Update"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/update_spn_sexUp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

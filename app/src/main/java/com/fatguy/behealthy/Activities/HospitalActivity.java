@@ -50,9 +50,10 @@ public class HospitalActivity extends Activity {
                 for (int i = 0; i < count; i++) {
                     Log.d(TAG, "onCreate: hospital list +1");
                     results rs = jsonMap.getResults()[i];
-                    plus_code pl = rs.getPlus_code();
                     name.add(rs.getName());
-                    address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
+                    plus_code pl = rs.getPlus_code();
+                    if (pl != null)
+                        address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
                     status.add(rs.getBusiness_status());
                     rate.add(rs.getRating());
                     lat.add(rs.getGeometry().getLocation().getLat());

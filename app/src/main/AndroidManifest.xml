@@ -33,11 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activities.CovidActivity"></activity>
+        <activity android:name=".Activities.CovidActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".Activities.LoginActivity"
@@ -61,9 +64,6 @@
         <activity
             android:name=".Activities.ImagleProfile"
             android:label="ImagleProfile" />
-        <activity
-            android:name=".Activities.UpdatingUserProfile"
-            android:label="Updating_user_profile" />
         <activity
             android:name=".Activities.HRConclusion"
             android:label="Updating_user_profile" />

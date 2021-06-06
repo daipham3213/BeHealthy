@@ -56,7 +56,7 @@ public class GetMapData extends AsyncTask<String, Void, JSONgmap> {
                 map.setNewResults(res.length());
                 results = new results[res.length()];
                 map.setStatus(jsonRoot.getString("status"));
-                for (int i = 0; i < results.length; i++) {
+                for (int i = 0; i < res.length(); i++) {
                     JSONObject resNode = res.getJSONObject(i);
                     results[i] = new results();
                     //Get values
