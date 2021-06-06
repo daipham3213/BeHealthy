@@ -23,6 +23,6 @@ public class CovidActivity extends AppCompatActivity {
     private void initData() {
         Intent i = getIntent();
         data = (Covid19) i.getSerializableExtra("data");
-        Log.d(TAG, "initData: Done" + data);
+        Log.d(TAG, "initData: Total - " + data.getTotal());
     }
 }

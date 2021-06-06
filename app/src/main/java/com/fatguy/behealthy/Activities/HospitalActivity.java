@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fatguy.behealthy.Adapters.HospitalAdapter;
-import com.fatguy.behealthy.Models.getMap;
 import com.fatguy.behealthy.Models.gmap.JSONgmap;
 import com.fatguy.behealthy.Models.gmap.plus_code;
 import com.fatguy.behealthy.Models.gmap.results;
@@ -30,7 +29,6 @@ public class HospitalActivity extends Activity {
     private final ArrayList<Double> lat = new ArrayList<>();
     private final ArrayList<Double> lng = new ArrayList<>();
     JSONgmap jsonMap = new JSONgmap();
-    getMap data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,10 +36,7 @@ public class HospitalActivity extends Activity {
         setContentView(R.layout.activity_nearby_hospital);
         hospitals = findViewById(R.id.hospital_rclView);
         Log.d(TAG, "hospitalListInit: getLocation");
-        data = new getMap(this, longitude, latitude, 1000, "hospital");
         hospitalListInit();
-
-
     }
 
     private void hospitalListInit() throws NullPointerException {
@@ -52,7 +47,7 @@ public class HospitalActivity extends Activity {
             if (jsonMap.getStatus() != null) {
                 Log.d(TAG, "hospitalListInit: translateData");
                 int count = jsonMap.counter();
-                for (int i = 0; i < count - 1; i++) {
+                for (int i = 0; i < count; i++) {
                     Log.d(TAG, "onCreate: hospital list +1");
                     results rs = jsonMap.getResults()[i];
                     plus_code pl = rs.getPlus_code();
