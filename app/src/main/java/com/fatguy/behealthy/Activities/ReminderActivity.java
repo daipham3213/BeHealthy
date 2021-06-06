@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,6 +61,7 @@ public class ReminderActivity extends Activity {
     int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
     private String d2s;
+    private int[] waterr={100,200,300,400,600};
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
@@ -111,7 +113,6 @@ public class ReminderActivity extends Activity {
 
         LoadList(R.array.screen_time,spnScreen);
         LoadList(R.array.cup_size,spnWater);
-        LoadData();
 
         spnWater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,6 +136,17 @@ public class ReminderActivity extends Activity {
             }
         });
     }
+
+    private void waterIntentOkk(){
+        int item = spnWater.getSelectedItemPosition();
+        mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
+        Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+    }
+
+    private void waterIntentLater(){
+        Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
+    }
+
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

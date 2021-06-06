@@ -40,4 +40,24 @@ public class Data implements Serializable {
     public String getCountry() {
         return country;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public void setAdds(String adds) {
+        this.adds = adds;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 }
