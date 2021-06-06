@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -93,7 +94,21 @@ public class RegisterActivity extends Activity {
                 String year = edtDate.getText().toString();
                 year = year.substring(year.lastIndexOf("-")+1);
                 Age = Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(year);
-                signUp(name,email,pass,sex,date,w,h,Age);
+
+
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(sex) || TextUtils.isEmpty(name)  || w == 0 || h == 0)
+                    Toast.makeText(RegisterActivity.this, "Please enter all information", Toast.LENGTH_SHORT).show();
+                else if (pass.length() < 8 || pass.length() > 50)
+                    Toast.makeText(RegisterActivity.this, "Password must have a minimum of 8 characters and a maximum of 50 characters ", Toast.LENGTH_SHORT).show();
+                else if (!sex.equals("Male") || !sex.equals("Female"))
+                    Toast.makeText(RegisterActivity.this, "Please select your gender", Toast.LENGTH_SHORT).show();
+                else if (isValidEmail(email) == false)
+                    Toast.makeText(RegisterActivity.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(RegisterActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
+                        signUp(name,email,pass,sex,date,w,h,Age);
+                }
+
 
             }
         });
@@ -162,4 +177,13 @@ public class RegisterActivity extends Activity {
             startActivity(new Intent(RegisterActivity.this, login.getClass()));
         }
     }
+
+    public static boolean isValidEmail(CharSequence target) {
+        if (target == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
 }
