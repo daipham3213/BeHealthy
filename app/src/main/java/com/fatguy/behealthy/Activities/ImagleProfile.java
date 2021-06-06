@@ -26,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -86,7 +85,7 @@ public class ImagleProfile extends Activity {
             }
         });
 
-        reference = FirebaseDatabase.getInstance().getReference().child("User");
+        reference = FirebaseDatabase.getInstance().getReference().child("User").child(fAuth.getUid());
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,15 +98,13 @@ public class ImagleProfile extends Activity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    if (ds.child("email").getValue().equals(MainActivity.email)) {
-                        name.setText(ds.child("name").getValue(String.class));
-                        Email.setText(MainActivity.email);
-                        date.setText(ds.child("date").getValue(String.class));
-                        height.setText(ds.child("height").getValue(float.class).toString());
-                        weight.setText(ds.child("weight").getValue(float.class).toString());
-                    }
-                }
+
+                name.setText(snapshot.child("name").getValue(String.class));
+                Email.setText(snapshot.child("email").getValue(String.class));
+                date.setText(snapshot.child("date").getValue(String.class));
+                height.setText(snapshot.child("height").getValue(float.class).toString());
+                weight.setText(snapshot.child("weight").getValue(float.class).toString());
+
             }
 
             @Override
@@ -118,18 +115,14 @@ public class ImagleProfile extends Activity {
     }
 
     private void getData() {
-        reference = FirebaseDatabase.getInstance().getReference().child("User");
-        Query query = reference.orderByChild("email").equalTo(MainActivity.email);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference().child("User").child(fAuth.getUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    String key = ds.getKey();
-                    reference.child(key).child("name").setValue(name.getText().toString().trim());
-                    reference.child(key).child("date").setValue(date.getText().toString().trim());
-                    reference.child(key).child("height").setValue(Float.valueOf(height.getText().toString().trim()));
-                    reference.child(key).child("weight").setValue(Float.valueOf(weight.getText().toString().trim()));
-                }
+                reference.child("name").setValue(name.getText().toString().trim());
+                reference.child("date").setValue(date.getText().toString().trim());
+                reference.child("height").setValue(Float.valueOf(height.getText().toString().trim()));
+                reference.child("weight").setValue(Float.valueOf(weight.getText().toString().trim()));
             }
 
             @Override
