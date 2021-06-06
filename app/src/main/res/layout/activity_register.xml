@@ -75,19 +75,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/reg_txtEmail" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/reg_txtDate"
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_margin="10dp"
-                        android:layout_marginTop="9dp"
-                        android:ems="10"
+                        android:layout_margin="12dp"
                         android:hint="Date of birth"
-                        android:inputType="date"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/reg_txtPassword" />
+                        android:paddingTop="10dp"
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/reg_txtWeight"
