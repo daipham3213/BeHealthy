@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,25 +32,26 @@ public class CovidActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent();
+        data = (Covid19) intent.getSerializableExtra("data");
         setContentView(R.layout.activity_covid);
         initData();
         set();
 
     }
 
-    private void set(){
+    private void set() {
 
         list = findViewById(R.id.covid_list);
         recyclerView = findViewById(R.id.coivd_view);
-        tolal= (TextView) findViewById(R.id.coivid_txt_total);
-        die = (TextView) findViewById(R.id.coivid_txt_die);
-        recovery = (TextView) findViewById(R.id.coivd_txt_recovery);
+        tolal = findViewById(R.id.coivid_txt_total);
+        die = findViewById(R.id.coivid_txt_die);
+        recovery = findViewById(R.id.coivd_txt_recovery);
 //        xu li recyclerView
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        for (int i = 0 ; i<data.getData().length;i++)
-        {
-            Data add =new Data();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        for (int i = 0; i < data.getData().length; i++) {
+            Data add = new Data();
             add.setName(data.getData()[i].getName());
             add.setAge(data.getData()[i].getAge());
             add.setAdds(data.getData()[i].getAdds());
