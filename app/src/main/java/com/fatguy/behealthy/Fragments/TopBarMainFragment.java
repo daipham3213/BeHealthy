@@ -93,7 +93,7 @@ public class TopBarMainFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.top_btnMore:
+                    case R.id.menuLogout:
                         fAuth.signOut();
                         startActivity(new Intent(getContext(), LoginActivity.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
