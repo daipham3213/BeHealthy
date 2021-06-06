@@ -43,23 +43,23 @@ public class CovidActivity extends AppCompatActivity {
 
         list = findViewById(R.id.covid_list);
         recyclerView = findViewById(R.id.coivd_view);
-        tolal= (TextView) findViewById(R.id.coivid_txt_total);
-        die = (TextView) findViewById(R.id.coivid_txt_die);
-        recovery = (TextView) findViewById(R.id.coivd_txt_recovery);
+        tolal = findViewById(R.id.coivid_txt_total);
+        die = findViewById(R.id.coivid_txt_die);
+        recovery = findViewById(R.id.coivd_txt_recovery);
 //        xu li recyclerView
         recyclerView.setHasFixedSize(true);
-        CovidAdapter covidAdpter =new CovidAdapter(this);
+        CovidAdapter covidAdapter = new CovidAdapter();
+        recyclerView.setAdapter(covidAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(covidAdpter);
-        for (int i = 0 ; i<data.getData().length;i++)
-        {
-            Data add =new Data();
+
+        for (int i = 0; i < data.getData().length; i++) {
+            Data add = new Data();
             add.setName(data.getData()[i].getName());
             add.setAge(data.getData()[i].getAge());
             add.setAdds(data.getData()[i].getAdds());
             add.setStatus(data.getData()[i].getStatus());
             add.setCountry(data.getData()[i].getCountry());
-            covidAdpter.addMessage(add);
+            covidAdapter.addMessage(add);
         }
         String datatolal= data.getTotal();
         String datadie= data.getDie();
