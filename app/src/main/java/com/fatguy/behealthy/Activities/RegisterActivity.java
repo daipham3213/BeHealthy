@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -104,9 +105,11 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this, "Please select your gender", Toast.LENGTH_SHORT).show();
                 else if (isValidEmail(email) == false)
                     Toast.makeText(RegisterActivity.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+                else if (isEmailexist(email))
+                    Toast.makeText(RegisterActivity.this, "Email already exists in data ", Toast.LENGTH_SHORT).show();
                 else {
                     Toast.makeText(RegisterActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
-                        signUp(name,email,pass,sex,date,w,h,Age);
+                    signUp(name,email,pass,sex,date,w,h,Age);
                 }
 
 
@@ -185,5 +188,53 @@ public class RegisterActivity extends Activity {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
     }
+    public boolean isEmailexist (String email)
+    {
+        mAuth.fetchSignInMethodsForEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                    @Override
+
+                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+
+                        boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+
+                        if (isNewUser) {
+                            Log.e("TAG", "Is New User!");
+                            return;
+
+                        } else {
+                            Log.e("TAG", "Is Old User!");
+
+                        }
+
+                    }
+                });
+            return  false;
+    }
+    public boolean isEmailReal (String email)
+    {
+        mAuth.fetchSignInMethodsForEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                    @Override
+
+                    public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+
+                        boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+
+                        if (isNewUser) {
+                            Log.e("TAG", "Is New User!");
+                            return;
+
+                        } else {
+                            Log.e("TAG", "Is Old User!");
+
+                        }
+
+                    }
+                });
+        return  false;
+    }
+
+
 
 }

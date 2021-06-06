@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fatguy.behealthy.Adapters.CoivdAdpter;
+import com.fatguy.behealthy.Adapters.CovidAdapter;
 import com.fatguy.behealthy.Models.Covid.Covid19;
 import com.fatguy.behealthy.Models.Covid.Data;
 import com.fatguy.behealthy.R;
@@ -32,38 +32,35 @@ public class CovidActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent();
-        data = (Covid19) intent.getSerializableExtra("data");
         setContentView(R.layout.activity_covid);
         initData();
+
         set();
 
     }
 
-    private void set() {
+    private void set(){
 
         list = findViewById(R.id.covid_list);
         recyclerView = findViewById(R.id.coivd_view);
-        tolal = findViewById(R.id.coivid_txt_total);
-        die = findViewById(R.id.coivid_txt_die);
-        recovery = findViewById(R.id.coivd_txt_recovery);
+        tolal= (TextView) findViewById(R.id.coivid_txt_total);
+        die = (TextView) findViewById(R.id.coivid_txt_die);
+        recovery = (TextView) findViewById(R.id.coivd_txt_recovery);
 //        xu li recyclerView
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        for (int i = 0; i < data.getData().length; i++) {
-            Data add = new Data();
+        CovidAdapter covidAdpter =new CovidAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(covidAdpter);
+        for (int i = 0 ; i<data.getData().length;i++)
+        {
+            Data add =new Data();
             add.setName(data.getData()[i].getName());
             add.setAge(data.getData()[i].getAge());
             add.setAdds(data.getData()[i].getAdds());
             add.setStatus(data.getData()[i].getStatus());
             add.setCountry(data.getData()[i].getCountry());
-
-            listData.add(add);
+            covidAdpter.addMessage(add);
         }
-        CoivdAdpter coivdAdpter =new CoivdAdpter(listData,this);
-        recyclerView.setAdapter(coivdAdpter);
-        // xu li liner
-
         String datatolal= data.getTotal();
         String datadie= data.getDie();
         String datarecovery=data.getRecovery();
@@ -71,8 +68,6 @@ public class CovidActivity extends AppCompatActivity {
         tolal.setText(tolal.getText()+":"+"\t"+datatolal);
         die .setText(die.getText()+":"+"\t"+datadie);
         recovery .setText(recovery.getText()+":"+"\t"+datarecovery);
-
-
 
     }
 
