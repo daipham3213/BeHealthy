@@ -175,11 +175,11 @@ public class ReminderActivity extends Activity {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if(snapshot.hasChild("State") & snapshot.hasChild("Value")){
-                    check[0] = (Boolean) snapshot.child("State").getValue();
+                    check[0] = snapshot.child("State").getValue(Boolean.TYPE);
                     swtScreen.setChecked(check[0]);
                     long val = (long) snapshot.child("Value").getValue();
                     spnScreen.setSelection(Math.toIntExact(val));
-                    onScreen = (long) snapshot.child("OnScreen").child(d2s).getValue();
+                    onScreen = snapshot.child("OnScreen").child(d2s).getValue(Long.TYPE);
                     long hoursOS = TimeUnit.MILLISECONDS.toMinutes(onScreen);
                     if (check[0] & (spnScreen.getSelectedItemPosition()+2 <= hoursOS))
                     {
@@ -275,7 +275,7 @@ public class ReminderActivity extends Activity {
 
     private void progress(float target, float counted){
         if (target == 0) target = 1; //divide by 0
-        float percent =( (float)counted/target)*100;
+        float percent = (counted / target) * 100;
 //        this.percent.setText(String.valueOf((int)percent)+"%");
 //        number.setText(total_step+" / "+target);
         waterBar.setProgress(percent);

@@ -37,8 +37,12 @@ public class getMap {
         Radius = radius;
         this.types = types;
         //URL GMap Place api
-        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=" + radius + "&types=" + types + "&key=" + context.getString(R.string.api_key);
-
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rankby=distance&keyword=" +
+                types +
+                "&location=" +
+                lat + "," + lng +
+                "&key=" + context.getString(R.string.api_key) +
+                "&sensor=false&libraries=places";
     }
 
     public void getMap() throws ExecutionException, InterruptedException {

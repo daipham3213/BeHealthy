@@ -130,7 +130,7 @@ public class Utils {
 
     public static String dateFormat(int type) {
         SimpleDateFormat dateTime = new SimpleDateFormat("dd-MM-yyyy  hh:mm");
-        SimpleDateFormat dateOnly = new SimpleDateFormat("dd-MM-yyyy  hh:mm");
+        SimpleDateFormat dateOnly = new SimpleDateFormat("dd-MM-yyyy");
         String d2s = null;
 
         Date date = Calendar.getInstance().getTime();
