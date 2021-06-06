@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.fatguy.behealthy.Activities.CovidActivity;
+import com.fatguy.behealthy.R;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -19,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
     private static final String TAG = "GetCovid19";
@@ -27,6 +29,7 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
     ProgressDialog progDailog;
     private String url;
     private JSONObject jsonRoot;
+    private ArrayList<String> province;
 
     public GetCovid19(Context context) {
         this.context = context;
@@ -54,6 +57,32 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
         context.startActivity(start_covid);
     }
 
+    private static String readText(Context context, int resId) throws IOException {
+        InputStream is = context.getResources().openRawResource(resId);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String s = null;
+        while ((s = br.readLine()) != null) {
+            sb.append(s);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private void getData() throws IOException, JSONException {
+        jsonRoot = readJsonFromUrl(url);
+    }
+
+    @NotNull
+    private String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
+    }
+
     @Override
     protected Covid19 doInBackground(String... url) {
         try {
@@ -78,6 +107,7 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
                 }
                 statistic.setData(arrg);
             }
+            statistic.setProvince(readProvince(context));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -86,29 +116,28 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
         return statistic;
     }
 
-    private void getData() throws IOException, JSONException {
-        jsonRoot = readJsonFromUrl(url);
-    }
-
-    @NotNull
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
     public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
+        try (InputStream is = new URL(url).openStream()) {
+            try {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                String jsonText = readAll(rd);
+                return new JSONObject(jsonText);
+            } finally {
+                is.close();
+            }
         }
+    }
+
+    public ArrayList<String> readProvince(Context context) throws IOException, JSONException {
+        String jsonText = readText(context, R.raw.province);
+        JSONObject jsonRoot = new JSONObject(jsonText);
+        ArrayList<String> province = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            if (jsonRoot.has(String.valueOf(i))) {
+                JSONObject obj = jsonRoot.getJSONObject(String.valueOf(i));
+                province.add(obj.getString("name"));
+            }
+        }
+        return province;
     }
 }

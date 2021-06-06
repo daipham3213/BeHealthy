@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void Initial_Main() {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     if (snapshot.hasChild(d2s)) {
-                        screenTimeDB = (long) snapshot.child(d2s).getValue();
+                        screenTimeDB = snapshot.child(d2s).getValue(Long.TYPE);
                     } else mRef.child(d2s).setValue(0);
                 }
 

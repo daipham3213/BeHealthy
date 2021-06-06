@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.fatguy.behealthy.Activities.ImagleProfile;
 import com.fatguy.behealthy.Activities.LoginActivity;
+import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 public class TopBarMainFragment extends Fragment {
     private View root;
     private ImageView btnMore, Avatar;
-    private TextView welcome;
+    private TextView name, greeting;
     private StorageReference storageReference;
     private FirebaseAuth fAuth;
     private DatabaseReference mRef;
@@ -55,7 +56,8 @@ public class TopBarMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_top_bar_main, container, false);
         btnMore = root.findViewById(R.id.top_btnMore);
-        welcome = root.findViewById(R.id.nav_Name);
+        name = root.findViewById(R.id.nav_Name);
+        greeting = root.findViewById(R.id.nav_welcome);
 
         Avatar = root.findViewById(R.id.btnAvatar);
         fAuth = FirebaseAuth.getInstance();
@@ -64,7 +66,20 @@ public class TopBarMainFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                welcome.setText("Welcome, " + snapshot.getValue(String.class));
+                name.setText("Welcome, " + snapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        mRef = FirebaseDatabase.getInstance().getReference().child("Welcome");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                String i = String.valueOf(Utils.RandomInt(1, 14));
+                greeting.setText(snapshot.child(i).getValue(String.class));
             }
 
             @Override

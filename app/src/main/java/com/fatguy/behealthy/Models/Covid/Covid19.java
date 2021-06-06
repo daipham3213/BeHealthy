@@ -1,21 +1,24 @@
 package com.fatguy.behealthy.Models.Covid;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Covid19 implements Serializable {
     private String total;
     private String recovery;
     private String die;
     private Data[] data;
+    private ArrayList<String> province;
 
     public Covid19() {
     }
 
-    public Covid19(String total, String recovery, String die) {
-        this.total = total;
-        this.recovery = recovery;
-        this.die = die;
-        this.data = new Data[Integer.parseInt(total)];
+    public ArrayList<String> getProvince() {
+        return province;
+    }
+
+    public void setProvince(ArrayList<String> province) {
+        this.province = province;
     }
 
     public String getTotal() {

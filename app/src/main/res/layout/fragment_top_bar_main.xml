@@ -73,13 +73,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/nav_welcome"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="56dp"
-                    android:layout_marginTop="67dp"
-                    android:fontFamily="sans-serif-smallcaps"
+                    android:layout_marginTop="52dp"
+                    android:fontFamily="sans-serif-light"
                     android:text="Be Healthy!"
+                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/cardView5"

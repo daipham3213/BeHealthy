@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class Utils {
 
@@ -149,5 +150,11 @@ public class Utils {
             a[i] = s;
         }
         return a;
+    }
+
+    public static int RandomInt(int from, int to) {
+        Random rd = new Random();
+        int number = from + rd.nextInt(to + 1 - from);
+        return number;
     }
 }
