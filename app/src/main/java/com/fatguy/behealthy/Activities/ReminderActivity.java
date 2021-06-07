@@ -1,6 +1,7 @@
 package com.fatguy.behealthy.Activities;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,6 +37,7 @@ import com.suke.widget.SwitchButton;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +62,7 @@ public class ReminderActivity extends Activity {
     int hourStart = 7;
     int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
-    private String d2s;
+    private String d2s,d1s;
     private int[] waterr={100,200,300,400,600};
 
     NotificationManagerCompat notifyManage;
@@ -79,6 +81,7 @@ public class ReminderActivity extends Activity {
         waterBar = findViewById(R.id.reminder_water_chart);
 
         d2s = Utils.dateFormat(0);
+        d1s = Utils.dateFormat(1);
 
         createNotificationChannel();
 
@@ -100,19 +103,24 @@ public class ReminderActivity extends Activity {
                         new Intent(this, ReminderActivity.class),
                         PendingIntent.FLAG_ONE_SHOT);
 
-        water_notify = new NotificationCompat.Builder(this, "fatguyA")
-                .setSmallIcon(R.drawable.ic_glass_of_water)
-                .setContentTitle("Reminder - Alert")
-                .setContentText("Don't forget to drink lots of water!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater)
-                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk);
+//        water_notify = new Notific ationCompat.Builder(this, "fatguyA")
+//                .setSmallIcon(R.drawable.ic_glass_of_water)
+//                .setContentTitle("Reminder - Alert")
+//                .setContentText("Don't forget to drink lots of water!")
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater)
+//                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk)
+//                .build();
+//
+//        notifyManage =  NotificationManagerCompat.from(this);
 
-        notifyManage =  NotificationManagerCompat.from(this);
+
         user = new User();
+        LoadData();
 
         LoadList(R.array.screen_time,spnScreen);
         LoadList(R.array.cup_size,spnWater);
+        LoadData();
 
         spnWater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -130,23 +138,40 @@ public class ReminderActivity extends Activity {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
+                    // thời gian hiện tại
                     hourStart = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                    minStart =Calendar.getInstance().get(Calendar.MINUTE);
+                    minStart  = Calendar.getInstance().get(Calendar.MINUTE);
+
                 }
             }
         });
     }
+    // khi nào gọi thuông báo : khi cách 1 tiếng từ thời gian bắt đầu onCheckedChanged swtWater(Chưa có cách giải quyết)
+    private void NoticeToDrinkWater(int hourStart){
+        // TimeUnit.HOURS.toMinutes(hourStart);
+        if (minStart == 0)
+            water_notify = new NotificationCompat.Builder(this, "fatguyA")
+                    .setSmallIcon(R.drawable.ic_glass_of_water)
+                    .setContentTitle("Reminder - Alert")
+                    .setContentText("Don't forget to drink lots of water!")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
+                    .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
 
-    private void waterIntentOkk(){
+        notifyManage =  NotificationManagerCompat.from(this);
+    }
+    // chon ok thì lưu vào firebase và hiện makeTest
+    private PendingIntent waterIntentOk(){
         int item = spnWater.getSelectedItemPosition();
         mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
         Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+        return null;
     }
-
-    private void waterIntentLater(){
+    //Chon Later thì hiện makeTest
+    private PendingIntent waterIntentLater(){
         Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
+        return null;
     }
-
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -210,20 +235,20 @@ public class ReminderActivity extends Activity {
             }
         });
 
-         DatabaseReference User = FirebaseDatabase.getInstance().getReference().child("User").child(mAuth.getUid());
-         User.addListenerForSingleValueEvent(new ValueEventListener() {
-             @Override
-             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                 user.setSex(snapshot.child("sex").getValue(String.class));
-                 user.setAge(snapshot.child("age").getValue(Integer.class));
-                 user.setWeight(snapshot.child("weight").getValue(Float.class));
-             }
+        DatabaseReference User = FirebaseDatabase.getInstance().getReference().child("User").child(mAuth.getUid());
+        User.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                user.setSex(snapshot.child("sex").getValue(String.class));
+                user.setAge(snapshot.child("age").getValue(Integer.class));
+                user.setWeight(snapshot.child("weight").getValue(Float.class));
+            }
 
-             @Override
-             public void onCancelled(@NonNull @NotNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-             }
-         });
+            }
+        });
 
         mRef.child("DrinkWater").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -264,7 +289,6 @@ public class ReminderActivity extends Activity {
 
             }
         });
-
     }
 
     private void DisplaySchedule (float amount, long cupSize){
