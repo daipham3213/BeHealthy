@@ -104,7 +104,7 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
                     String age = obj_json.getString("Age");
                     String adds = obj_json.getString("Adds");
                     String status = obj_json.getString("Status");
-                    String country = obj_json.getString("Status");
+                    String country = obj_json.getString("Country");
                     Data obj_data = new Data(name, age, adds, status, country);
                     arrg[i] = obj_data;
                 }
