@@ -1,11 +1,11 @@
 package com.fatguy.behealthy.Activities;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -37,13 +37,13 @@ import com.suke.widget.SwitchButton;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 
 public class ReminderActivity extends Activity {
+    private static final String TAG = "ReminderActivity";
     private SwitchButton swtWater;
     private SwitchButton swtScreen;
     private Spinner spnWater;
@@ -62,8 +62,8 @@ public class ReminderActivity extends Activity {
     int hourStart = 7;
     int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
-    private String d2s,d1s;
-    private int[] waterr={100,200,300,400,600};
+    private String d2s, d1s;
+    private final int[] waterr = {100, 200, 300, 400, 600};
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
@@ -87,6 +87,25 @@ public class ReminderActivity extends Activity {
 
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        swtScreen.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                editor.putBoolean("swtScreen", isChecked).apply();
+                mRef.child("ScreenTime").child("State").setValue(isChecked);
+                mRef.child("ScreenTime").child("Value").setValue(spnScreen.getSelectedItemPosition());
+            }
+        });
+
+        swtWater.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                editor.putBoolean("swtWater", isChecked).apply();
+                mRef.child("DrinkWater").child("Enable").setValue(isChecked);
+                mRef.child("DrinkWater").child("CupSize").setValue((spnWater.getSelectedItemPosition() + 1) * 100);
+            }
+        });
 
         notify = new NotificationCompat.Builder(this, "fatguyA")
                 .setSmallIcon(R.drawable.ic_smartphone)
@@ -95,7 +114,7 @@ public class ReminderActivity extends Activity {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         PendingIntent waterIntentLater = PendingIntent.
-                getActivity(this,0,
+                getActivity(this, 0,
                         new Intent(this, ReminderActivity.class),
                         PendingIntent.FLAG_ONE_SHOT);
         PendingIntent waterIntentOk = PendingIntent.
@@ -198,7 +217,6 @@ public class ReminderActivity extends Activity {
         }
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -217,13 +235,16 @@ public class ReminderActivity extends Activity {
         spn.setAdapter(adapter);
     }
 
-    private void LoadData(){
+    private void LoadData() {
         final boolean[] check = new boolean[1];
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        swtWater.setChecked(preferences.getBoolean("swtWater", true));
+        swtScreen.setChecked(preferences.getBoolean("swtScreen", true));
         mRef.child("ScreenTime").addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.hasChild("State") & snapshot.hasChild("Value")){
+                if (snapshot.hasChild("State") & snapshot.hasChild("Value")) {
                     check[0] = snapshot.child("State").getValue(Boolean.TYPE);
                     swtScreen.setChecked(check[0]);
                     long val = (long) snapshot.child("Value").getValue();
@@ -236,7 +257,7 @@ public class ReminderActivity extends Activity {
                     }
                 }
                 else {
-                    mRef.child("ScreenTime").child("State").setValue(false);
+                    mRef.child("ScreenTime").child("State").setValue(true);
                     mRef.child("ScreenTime").child("Value").setValue(0);
                 }
             }
@@ -278,9 +299,9 @@ public class ReminderActivity extends Activity {
                     cupSize = snapshot.child("CupSize").getValue(Long.class);
                 } else mRef.child("DrinkWater").child("CupSize").setValue(100);
 
-                if (snapshot.hasChild("Enable")){
+                if (snapshot.hasChild("Enable")) {
                     swtWater.setChecked(snapshot.child("Enable").getValue(Boolean.class));
-                } else mRef.child("DrinkWater").child("Enable").setValue(false);
+                } else mRef.child("DrinkWater").child("Enable").setValue(true);
 
                 if (snapshot.hasChild("Hour")){
                     hourStart = snapshot.child("Hour").getValue(Integer.class);
