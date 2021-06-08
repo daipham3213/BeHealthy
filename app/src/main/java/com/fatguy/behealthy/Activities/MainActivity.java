@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -93,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                     if (snapshot.hasChild(d2s)) {
+                        SharedPreferences pref = getSharedPreferences(TAG, MODE_PRIVATE);
                         screenTimeDB = snapshot.child(d2s).getValue(Long.TYPE);
+                        pref.edit().putLong("OnScreen", screenTimeDB).apply();
                     } else mRef.child(d2s).setValue(0);
                 }
 
@@ -101,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull @NotNull DatabaseError error) {
                 }
             });
-
+            SharedPreferences pref = getSharedPreferences(TAG, MODE_PRIVATE);
+            screenTimeDB = pref.getLong("OnScreen", 0);
+            Log.d(TAG, "Initial_Main: screenTimeDB - " + screenTimeDB);
             IntentFilter lockFilter = new IntentFilter();
             lockFilter.addAction(Intent.ACTION_SCREEN_ON);
             lockFilter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -123,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                                 Manifest.permission.CAMERA,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND
                         },
                 1);
     }
@@ -136,10 +142,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         screenTimeDB = screenTimeDB + screenTime;
         mRef.child(d2s).setValue(screenTimeDB);
-        Log.d(TAG, "onPause: screenTimeDB - " + screenTimeDB);
+        SharedPreferences pref = getSharedPreferences(TAG, MODE_PRIVATE);
+        pref.edit().putLong("OnScreen", screenTimeDB).apply();
+        Log.d(TAG, "onStop: screenTimeDB - " + screenTimeDB);
     }
 }

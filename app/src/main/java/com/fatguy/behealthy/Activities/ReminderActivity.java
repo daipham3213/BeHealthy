@@ -1,11 +1,11 @@
 package com.fatguy.behealthy.Activities;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -37,13 +37,13 @@ import com.suke.widget.SwitchButton;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 
 public class ReminderActivity extends Activity {
+    private static final String TAG = "ReminderActivity";
     private SwitchButton swtWater;
     private SwitchButton swtScreen;
     private Spinner spnWater;
@@ -62,8 +62,9 @@ public class ReminderActivity extends Activity {
     int hourStart = 7;
     int minStart = 30;
     private IconRoundCornerProgressBar waterBar;
-    private String d2s,d1s;
-    private int[] waterr={100,200,300,400,600};
+    private String d2s, d1s;
+    private final int[] waterr = {100, 200, 300, 400, 600};
+    private long item,item2;
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
@@ -87,6 +88,26 @@ public class ReminderActivity extends Activity {
 
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        swtScreen.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                editor.putBoolean("swtScreen", isChecked).apply();
+                mRef.child("ScreenTime").child("State").setValue(isChecked);
+                mRef.child("ScreenTime").child("Value").setValue(spnScreen.getSelectedItemPosition());
+            }
+        });
+
+        swtWater.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                editor.putBoolean("swtWater", isChecked).apply();
+                mRef.child("DrinkWater").child("Enable").setValue(isChecked);
+                mRef.child("DrinkWater").child("CupSize").setValue((spnWater.getSelectedItemPosition() + 1) * 100);
+            }
+        });
 
         notify = new NotificationCompat.Builder(this, "fatguyA")
                 .setSmallIcon(R.drawable.ic_smartphone)
@@ -95,7 +116,7 @@ public class ReminderActivity extends Activity {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         PendingIntent waterIntentLater = PendingIntent.
-                getActivity(this,0,
+                getActivity(this, 0,
                         new Intent(this, ReminderActivity.class),
                         PendingIntent.FLAG_ONE_SHOT);
         PendingIntent waterIntentOk = PendingIntent.
@@ -146,28 +167,41 @@ public class ReminderActivity extends Activity {
             }
         });
     }
+
     // khi nào gọi thuông báo : khi cách 1 tiếng từ thời gian bắt đầu onCheckedChanged swtWater(Chưa có cách giải quyết)
     private void NoticeToDrinkWater(int hourStart){
         // TimeUnit.HOURS.toMinutes(hourStart);
-        if (minStart == 0)
-            water_notify = new NotificationCompat.Builder(this, "fatguyA")
-                    .setSmallIcon(R.drawable.ic_glass_of_water)
-                    .setContentTitle("Reminder - Alert")
-                    .setContentText("Don't forget to drink lots of water!")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
-                    .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
-
+        water_notify = new NotificationCompat.Builder(this, "fatguyA")
+                .setSmallIcon(R.drawable.ic_glass_of_water)
+                .setContentTitle("Reminder - Alert")
+                .setContentText("Don't forget to drink lots of water!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
+                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
         notifyManage =  NotificationManagerCompat.from(this);
     }
-    // chon ok thì lưu vào firebase và hiện makeTest
+
+
+    // ok thì lưu vào firebase và hiện makeTest lấy Consumed cử trong firebase cộng với Consumed mới và thêm vào firebase
     private PendingIntent waterIntentOk(){
-        int item = spnWater.getSelectedItemPosition();
-        mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
-        Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+        item = (spnWater.getSelectedItemPosition() + 1) * 100;
+        mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
+                item2 = snapshot.child("Consumed").getValue(Long.class);
+                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(item2 + item);
+                Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+
+            }
+        });
         return null;
     }
-    //Chon Later thì hiện makeTest
+
+    //Later thì hiện makeTest
     private PendingIntent waterIntentLater(){
         Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
         return null;
@@ -185,7 +219,6 @@ public class ReminderActivity extends Activity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
 
     @Override
     protected void onPause() {
@@ -205,13 +238,16 @@ public class ReminderActivity extends Activity {
         spn.setAdapter(adapter);
     }
 
-    private void LoadData(){
+    private void LoadData() {
         final boolean[] check = new boolean[1];
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        swtWater.setChecked(preferences.getBoolean("swtWater", true));
+        swtScreen.setChecked(preferences.getBoolean("swtScreen", true));
         mRef.child("ScreenTime").addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if(snapshot.hasChild("State") & snapshot.hasChild("Value")){
+                if (snapshot.hasChild("State") & snapshot.hasChild("Value")) {
                     check[0] = snapshot.child("State").getValue(Boolean.TYPE);
                     swtScreen.setChecked(check[0]);
                     long val = (long) snapshot.child("Value").getValue();
@@ -224,7 +260,7 @@ public class ReminderActivity extends Activity {
                     }
                 }
                 else {
-                    mRef.child("ScreenTime").child("State").setValue(false);
+                    mRef.child("ScreenTime").child("State").setValue(true);
                     mRef.child("ScreenTime").child("Value").setValue(0);
                 }
             }
@@ -266,9 +302,9 @@ public class ReminderActivity extends Activity {
                     cupSize = snapshot.child("CupSize").getValue(Long.class);
                 } else mRef.child("DrinkWater").child("CupSize").setValue(100);
 
-                if (snapshot.hasChild("Enable")){
+                if (snapshot.hasChild("Enable")) {
                     swtWater.setChecked(snapshot.child("Enable").getValue(Boolean.class));
-                } else mRef.child("DrinkWater").child("Enable").setValue(false);
+                } else mRef.child("DrinkWater").child("Enable").setValue(true);
 
                 if (snapshot.hasChild("Hour")){
                     hourStart = snapshot.child("Hour").getValue(Integer.class);

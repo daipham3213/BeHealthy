@@ -18,8 +18,8 @@ import com.fatguy.behealthy.R;
 public class StartDiagnose extends AppCompatActivity {
     private String selection = "";
     private String[] symptoms = new String[]{
-            "itching", "skin_rash", "nodal_skin_eruptions", "continuous_sneezing", "shivering", "chillsjoint_pain",
-            "stomach_painacidity", "ulcers_on_tongue", "muscle_wasting", "vomiting", "burning_micturition",
+            "itching", "skin_rash", "nodal_skin_eruptions", "continuous_sneezing", "shivering",
+            "ulcers_on_tongue", "muscle_wasting", "vomiting", "burning_micturition",
             "spotting_ urination", " fatigue", "weight_gain", "anxiety", "cold_hands_and_feets", "mood_swings",
             "weight_loss", "restlessness", "lethargy", "patches_in_throat", "irregular_sugar_level", "cough",
             "high_fever", "sunken_eyes", "breathlessness", "sweating", "dehydration", "indigestion", "headache",

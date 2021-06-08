@@ -6,10 +6,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
+        android:maxWidth="300dp"
         app:cardBackgroundColor="@color/md_teal_100"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -22,6 +22,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import okhttp3.Response;
+
 public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
     private static final String TAG = "GetCovid19";
     private final Context context;
@@ -30,6 +32,7 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
     private String url;
     private JSONObject jsonRoot;
     private ArrayList<String> province;
+    Response response;
 
     public GetCovid19(Context context) {
         this.context = context;

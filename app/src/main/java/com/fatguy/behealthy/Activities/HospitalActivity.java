@@ -50,14 +50,17 @@ public class HospitalActivity extends Activity {
                 for (int i = 0; i < count; i++) {
                     Log.d(TAG, "onCreate: hospital list +1");
                     results rs = jsonMap.getResults()[i];
-                    name.add(rs.getName());
-                    plus_code pl = rs.getPlus_code();
-                    if (pl != null)
-                        address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
-                    status.add(rs.getBusiness_status());
-                    rate.add(rs.getRating());
-                    lat.add(rs.getGeometry().getLocation().getLat());
-                    lng.add(rs.getGeometry().getLocation().getLng());
+                    if (rs != null) {
+                        name.add(rs.getName());
+                        plus_code pl = rs.getPlus_code();
+                        if (pl != null)
+                            address.add(rs.getVicinity() + pl.getCompound_code().substring(pl.getCompound_code().indexOf(" ")));
+                        else address.add("");
+                        status.add(rs.getBusiness_status());
+                        rate.add(rs.getRating());
+                        lat.add(rs.getGeometry().getLocation().getLat());
+                        lng.add(rs.getGeometry().getLocation().getLng());
+                    }
                 }
             }
         Log.d(TAG, "hospitalListInit: initAdapter");
