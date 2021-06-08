@@ -1,6 +1,7 @@
 package com.fatguy.behealthy.Activities;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
@@ -65,10 +67,11 @@ public class ReminderActivity extends Activity {
     private String d2s, d1s;
     private final int[] waterr = {100, 200, 300, 400, 600};
     private long item,item2;
+    PendingIntent waterIntentLater,waterIntentOk;
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
-    NotificationCompat.Builder water_notify;
+    // Notification  water_notify;
 
 
     @Override
@@ -155,53 +158,53 @@ public class ReminderActivity extends Activity {
             }
         });
 
+
         swtWater.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked) {
-                    // thời gian hiện tại
                     hourStart = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
                     minStart  = Calendar.getInstance().get(Calendar.MINUTE);
-
+                    NoticeToDrinkWater();
                 }
             }
         });
     }
 
-    // khi nào gọi thuông báo : khi cách 1 tiếng từ thời gian bắt đầu onCheckedChanged swtWater(Chưa có cách giải quyết)
-    private void NoticeToDrinkWater(int hourStart){
-        // TimeUnit.HOURS.toMinutes(hourStart);
-        water_notify = new NotificationCompat.Builder(this, "fatguyA")
+    private  int getID(){
+        return(int) new Date().getTime();
+    }
+
+    private void NoticeToDrinkWater(){
+        Notification  water_notify = new NotificationCompat.Builder(this, "fatguyA")
                 .setSmallIcon(R.drawable.ic_glass_of_water)
                 .setContentTitle("Reminder - Alert")
                 .setContentText("Don't forget to drink lots of water!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
-                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
+                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater)
+                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk)
+                .build();
         notifyManage =  NotificationManagerCompat.from(this);
+        notifyManage.notify(getID(),water_notify);
     }
 
-
-    // ok thì lưu vào firebase và hiện makeTest lấy Consumed cử trong firebase cộng với Consumed mới và thêm vào firebase
     private PendingIntent waterIntentOk(){
         item = (spnWater.getSelectedItemPosition() + 1) * 100;
         mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
-                item2 = snapshot.child("Consumed").getValue(Long.class);
-                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(item2 + item);
-                Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+                item2 = snapshot.child("DrinkWater").child(d2s).child("Consumed").getValue(Long.class);
+                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(item+item2);
+                Toast.makeText(ReminderActivity.this, "Great "+item+"ml always drink water on time and today you drank "+(item+item2)+"ml of water", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
-
             }
         });
         return null;
     }
 
-    //Later thì hiện makeTest
     private PendingIntent waterIntentLater(){
         Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
         return null;
@@ -352,6 +355,7 @@ public class ReminderActivity extends Activity {
 //        number.setText(total_step+" / "+target);
         waterBar.setProgress(percent);
     }
+
 
     private void scheduleUp (float amount, long cupSize){
         int h = hourStart;
