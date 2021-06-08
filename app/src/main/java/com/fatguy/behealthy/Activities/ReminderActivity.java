@@ -160,7 +160,7 @@ public class ReminderActivity extends Activity {
         notifyManage =  NotificationManagerCompat.from(this);
     }
 
-    
+
     // ok thì lưu vào firebase và hiện makeTest
     private PendingIntent waterIntentOk(){
         int item = spnWater.getSelectedItemPosition();
