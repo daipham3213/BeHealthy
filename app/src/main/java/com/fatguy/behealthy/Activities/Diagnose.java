@@ -15,7 +15,6 @@ import com.fatguy.behealthy.Models.C45.Attribute;
 import com.fatguy.behealthy.Models.Utils;
 import com.fatguy.behealthy.R;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
+import static com.fatguy.behealthy.Models.Utils.Format2Read;
 
 public class Diagnose extends AppCompatActivity {
     private static final String TAG = "Diagnose";
@@ -53,6 +54,7 @@ public class Diagnose extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dataFilter(temp, name, true);
+                chat_box.scrollToPosition(adapter.getItemCount() - 1);
                 diagnose(symptoms.get(symptoms.size() - 1), attributes, ++curr_i);
             }
         });
@@ -60,6 +62,7 @@ public class Diagnose extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dataFilter(temp, name, false);
+                chat_box.scrollToPosition(adapter.getItemCount() - 1);
                 diagnose(symptoms.get(symptoms.size() - 1), attributes, ++curr_i);
             }
         });
@@ -72,7 +75,7 @@ public class Diagnose extends AppCompatActivity {
 
         attributes = (Attribute[]) diag_data.getSerializableExtra("attrs");
         first_symptom = diag_data.getStringExtra("selection");
-        first_symptom = Format(first_symptom);
+        first_symptom = Format2Read(first_symptom, 0);
         Log.d(TAG, "initData: Done");
         disease = findDisease(first_symptom, attributes);
         symptoms.add(first_symptom);
@@ -87,19 +90,57 @@ public class Diagnose extends AppCompatActivity {
     public void diagnose(String symptom, @NotNull Attribute[] attrs, int p) {
         if (p >= attrs.length) return;
         if (disease.size() == 1) {
+            adapter.addMessage(getSymptom(symptoms), Utils.dateFormat(1), true);
             adapter.addMessage("You may caught: " + disease.get(0), Utils.dateFormat(1), true);
-            adapter.addMessage(getDesc(disease.get(0)), Utils.dateFormat(1), true);
+            adapter.addMessage(disease.get(0) + "\n\t" + getDesc(disease.get(0)).trim(), Utils.dateFormat(1), true);
             adapter.addMessage("Precaution: \n" + getPre(disease.get(0)), Utils.dateFormat(1), true);
+            chat_box.scrollToPosition(adapter.getItemCount() - 1);
             btnYes.setClickable(false);
             btnNo.setClickable(false);
             return;
         }
         temp = filterDisease(disease, attrs[p].values.get(getPos(attrs[p])).classes);
-        if (temp.size() > 0) {
+        if (temp.size() > 0 & !symptom.contains(attrs[p].name)) {
             name = attrs[p].name;
+            name = Format2Read(name, 1);
             //Add question
             adapter.addMessage("Do you have " + name + "? ", Utils.dateFormat(1), true);
+            chat_box.scrollToPosition(adapter.getItemCount() - 1);
         } else diagnose(symptom, attrs, ++curr_i);
+    }
+
+    public String getSymptom(List<String> symptoms) {
+        List<String> symp = symptoms;
+        Scanner scan;
+        ArrayList<String[]> obj = new ArrayList<>();
+        String rs = "Symptoms: \n";
+        InputStream is = getResources().openRawResource(R.raw.disease_data);
+        scan = new Scanner(is);
+        String[] line;
+        for (int i = 0; i < symp.size(); i++) {
+            symp.set(i, Utils.Format2Read(symp.get(i), 0));
+        }
+        while (scan.hasNext()) {
+            line = scan.nextLine().split(",");
+            if (disease.get(0).equals(line[0])) {
+                obj.add(line);
+            }
+        }
+        for (String[] strs : obj) {
+            if (Utils.linearIn(symp, strs)) {
+                for (int i = 1; i < strs.length; i++) {
+                    if (!rs.contains(strs[i])) {
+                        symp.add(strs[i]);
+                    }
+                }
+            }
+        }
+        for (String st : symp) {
+            String temp = "- " + Utils.Format2Read(st.trim(), 1) + "\n";
+            if (!rs.contains(temp))
+                rs += temp;
+        }
+        return rs;
     }
 
     public String getDesc(String disease) {
@@ -114,7 +155,7 @@ public class Diagnose extends AppCompatActivity {
         StringBuilder desc = new StringBuilder();
         Utils.Format2Read(line);
         for (int i = 1; i < line.length; i++) {
-            desc.append(line[i]).append("\n");
+            desc.append(line[i]).append(", ");
         }
         return desc.toString();
     }
@@ -131,7 +172,7 @@ public class Diagnose extends AppCompatActivity {
         StringBuilder precaution = new StringBuilder();
         Utils.Format2Read(line);
         for (int i = 1; i < line.length; i++) {
-            precaution.append("- ").append(line[i]).append("\n");
+            precaution.append("\t- ").append(line[i]).append("\n");
         }
         return precaution.toString();
     }
@@ -177,13 +218,6 @@ public class Diagnose extends AppCompatActivity {
             pos = 1;
         }
         return pos;
-    }
-
-
-    public String Format(String str) {
-        str = str.toLowerCase();
-        str = StringUtils.replace(str, " ", "_");
-        return str;
     }
 
 }

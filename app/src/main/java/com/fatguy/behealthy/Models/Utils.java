@@ -14,8 +14,10 @@ import androidx.core.app.ActivityCompat;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class Utils {
@@ -156,5 +158,26 @@ public class Utils {
         Random rd = new Random();
         int number = from + rd.nextInt(to + 1 - from);
         return number;
+    }
+
+    public static String Format2Read(String str, int type) {
+        if (type == 1) {
+            str = StringUtils.capitalize(str);
+            str = StringUtils.replaceChars(str, "_", " ");
+        } else {
+            str = str.toLowerCase();
+            str = StringUtils.replace(str, " ", "_");
+        }
+        return str;
+    }
+
+    public static boolean linearIn(List<String> outer, String[] inner) {
+        List<String> innerAsList = Arrays.asList(inner.clone());
+        for (int i = 0; i < outer.size(); i++) {
+            if (!innerAsList.contains(" " + outer.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
