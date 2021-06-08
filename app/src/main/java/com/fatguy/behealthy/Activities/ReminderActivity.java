@@ -146,28 +146,39 @@ public class ReminderActivity extends Activity {
             }
         });
     }
+
     // khi nào gọi thuông báo : khi cách 1 tiếng từ thời gian bắt đầu onCheckedChanged swtWater(Chưa có cách giải quyết)
     private void NoticeToDrinkWater(int hourStart){
         // TimeUnit.HOURS.toMinutes(hourStart);
-        if (minStart == 0)
-            water_notify = new NotificationCompat.Builder(this, "fatguyA")
-                    .setSmallIcon(R.drawable.ic_glass_of_water)
-                    .setContentTitle("Reminder - Alert")
-                    .setContentText("Don't forget to drink lots of water!")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
-                    .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
-
+        water_notify = new NotificationCompat.Builder(this, "fatguyA")
+                .setSmallIcon(R.drawable.ic_glass_of_water)
+                .setContentTitle("Reminder - Alert")
+                .setContentText("Don't forget to drink lots of water!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(R.drawable.ic_glass_of_water, "Later",waterIntentLater())
+                .addAction(R.drawable.ic_glass_of_water, "OK",waterIntentOk());
         notifyManage =  NotificationManagerCompat.from(this);
     }
-    // chon ok thì lưu vào firebase và hiện makeTest
+
+    // ok thì lưu vào firebase và hiện makeTest
     private PendingIntent waterIntentOk(){
         int item = spnWater.getSelectedItemPosition();
-        mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
-        Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+        mRef = FirebaseDatabase.getInstance().getReference().child("User").child(mAuth.getUid());
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
+                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
+                Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+
+            }
+        });
         return null;
     }
-    //Chon Later thì hiện makeTest
+
+    //Later thì hiện makeTest
     private PendingIntent waterIntentLater(){
         Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
         return null;
