@@ -64,6 +64,7 @@ public class ReminderActivity extends Activity {
     private IconRoundCornerProgressBar waterBar;
     private String d2s, d1s;
     private final int[] waterr = {100, 200, 300, 400, 600};
+    private long item,item2;
 
     NotificationManagerCompat notifyManage;
     NotificationCompat.Builder notify;
@@ -89,6 +90,7 @@ public class ReminderActivity extends Activity {
         mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+
         swtScreen.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
@@ -179,15 +181,16 @@ public class ReminderActivity extends Activity {
         notifyManage =  NotificationManagerCompat.from(this);
     }
 
-    
-    // ok thì lưu vào firebase và hiện makeTest
+
+    // ok thì lưu vào firebase và hiện makeTest lấy Consumed cử trong firebase cộng với Consumed mới và thêm vào firebase
     private PendingIntent waterIntentOk(){
-        int item = spnWater.getSelectedItemPosition();
-        mRef = FirebaseDatabase.getInstance().getReference().child("User").child(mAuth.getUid());
+        item = (spnWater.getSelectedItemPosition() + 1) * 100;
+        mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
-                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(waterr[item]);
+                item2 = snapshot.child("Consumed").getValue(Long.class);
+                mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(item2 + item);
                 Toast.makeText(ReminderActivity.this, "good, always drink water on time", Toast.LENGTH_SHORT).show();
             }
             @Override
