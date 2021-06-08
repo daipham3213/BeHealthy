@@ -12,9 +12,6 @@ public class JSONgmap implements Serializable {
     }
 
     public JSONgmap() {
-        results = null;
-        status = "";
-        html_attributions = null;
     }
 
     public JSONgmap(String[] html_attributions, com.fatguy.behealthy.Models.gmap.results[] results, String status) {

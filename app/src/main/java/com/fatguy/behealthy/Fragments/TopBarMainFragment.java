@@ -1,6 +1,7 @@
 package com.fatguy.behealthy.Fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,7 +91,7 @@ public class TopBarMainFragment extends Fragment {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        imagleAvatar(Avatar);
+        imagleAvatar(Avatar, root.getContext());
 
         btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,12 +125,12 @@ public class TopBarMainFragment extends Fragment {
         popupMenu.show();
     }
 
-    public void imagleAvatar(ImageView av) {
+    public void imagleAvatar(ImageView av, Context context) {
         StorageReference profileRef = storageReference.child("User/" + fAuth.getCurrentUser().getUid() + "profile.jpg");
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(requireContext())
+                Glide.with(context)
                         .load(uri)
                         .apply(new RequestOptions().override(90, 90))
                         .into(av);

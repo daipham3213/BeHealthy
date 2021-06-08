@@ -7,6 +7,8 @@ public class plus_code implements Serializable {
     private String global_code;
 
     public plus_code() {
+        compound_code = "";
+        global_code = "";
     }
 
     public String getCompound_code() {

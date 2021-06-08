@@ -65,7 +65,6 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
                 vh.show(pos);
             }
         });
-
     }
 
 

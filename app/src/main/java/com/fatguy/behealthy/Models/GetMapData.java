@@ -27,13 +27,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class GetMapData extends AsyncTask<String, Void, JSONgmap> {
     private final String TAG = "GETDataSync";
     JSONObject jsonRoot = null;
     JSONgmap map;
     JSONArray res;
-    results[] results;
+    ArrayList<results> results;
     String url;
     JSONgmap output = new JSONgmap();
     private final Context context;
@@ -53,53 +54,56 @@ public class GetMapData extends AsyncTask<String, Void, JSONgmap> {
             if (jsonRoot != null) {
                 Log.d(TAG, "doInBackground: jsonData is " + jsonRoot.getString("status"));
                 res = jsonRoot.optJSONArray("results");
-                map.setNewResults(res.length());
-                results = new results[res.length()];
+                //map.setNewResults(res.length());
+                results = new ArrayList<>();
                 map.setStatus(jsonRoot.getString("status"));
                 for (int i = 0; i < res.length(); i++) {
                     JSONObject resNode = res.getJSONObject(i);
-                    results[i] = new results();
-                    //Get values
-                    if (!resNode.isNull("business_status"))
-                        results[i].setBusiness_status(resNode.getString("business_status"));
-                    results[i].setName(resNode.getString("name"));
-                    results[i].setPlace_id(resNode.getString("place_id"));
-                    results[i].setVicinity(resNode.getString("vicinity"));
-                    results[i].setIcon(resNode.getString("icon"));
-                    results[i].setReference(resNode.getString("reference"));
-                    //Geometry
-                    JSONObject geoNode = resNode.getJSONObject("geometry");
-                    JSONObject locNode = geoNode.getJSONObject("location");
-                    JSONObject viewNode = geoNode.getJSONObject("viewport");
-                    JSONObject northNode = viewNode.getJSONObject("northeast");
-                    JSONObject southNode = viewNode.getJSONObject("southwest");
+                    if (resNode != null) {
+                        results obj = new results();
+                        //Get values
+                        if (!resNode.isNull("business_status"))
+                            obj.setBusiness_status(resNode.getString("business_status"));
+                        obj.setName(resNode.getString("name"));
+                        obj.setPlace_id(resNode.getString("place_id"));
+                        obj.setVicinity(resNode.getString("vicinity"));
+                        obj.setIcon(resNode.getString("icon"));
+                        obj.setReference(resNode.getString("reference"));
+                        //Geometry
+                        JSONObject geoNode = resNode.getJSONObject("geometry");
+                        JSONObject locNode = geoNode.getJSONObject("location");
+                        JSONObject viewNode = geoNode.getJSONObject("viewport");
+                        JSONObject northNode = viewNode.getJSONObject("northeast");
+                        JSONObject southNode = viewNode.getJSONObject("southwest");
 
-                    northeast location = new northeast(locNode.getDouble("lat"), locNode.getDouble("lng"));
-                    northeast northeast = new northeast(northNode.getDouble("lat"), northNode.getDouble("lng"));
-                    northeast southwest = new northeast(southNode.getDouble("lat"), southNode.getDouble("lng"));
+                        northeast location = new northeast(locNode.getDouble("lat"), locNode.getDouble("lng"));
+                        northeast northeast = new northeast(northNode.getDouble("lat"), northNode.getDouble("lng"));
+                        northeast southwest = new northeast(southNode.getDouble("lat"), southNode.getDouble("lng"));
 
-                    viewport viewport = new viewport(northeast, southwest);
-                    geometry geometry = new geometry(location, viewport);
-                    results[i].setGeometry(geometry);//Done Geometry
+                        viewport viewport = new viewport(northeast, southwest);
+                        geometry geometry = new geometry(location, viewport);
+                        obj.setGeometry(geometry);//Done Geometry
 
-                    //Plus_code
-                    if (!resNode.isNull("plus_code")) {
-                        JSONObject plus_codeNode = resNode.getJSONObject("plus_code");
-                        plus_code plus_code = new plus_code(plus_codeNode.getString("compound_code"), plus_codeNode.getString("global_code"));
-                        results[i].setPlus_code(plus_code);
+                        //Plus_code
+                        if (!resNode.isNull("plus_code")) {
+                            JSONObject plus_codeNode = resNode.getJSONObject("plus_code");
+                            plus_code plus_code = new plus_code(plus_codeNode.getString("compound_code"), plus_codeNode.getString("global_code"));
+                            obj.setPlus_code(plus_code);
+                        }
+                        //Open_hours
+                        if (!resNode.isNull("opening_hours")) {
+                            JSONObject openNode = resNode.getJSONObject("opening_hours");
+                            opening_hours isOpen = new opening_hours(openNode.getBoolean("open_now"));
+                            obj.setOpening_hours(isOpen);
+                        }
+                        //Save values
+
+                        if (!resNode.isNull("rating"))
+                            obj.setRating(resNode.getDouble("rating"));
+                        results.add(obj);
                     }
-                    //Open_hours
-                    if (!resNode.isNull("opening_hours")) {
-                        JSONObject openNode = resNode.getJSONObject("opening_hours");
-                        opening_hours isOpen = new opening_hours(openNode.getBoolean("open_now"));
-                        results[i].setOpening_hours(isOpen);
-                    }
-                    //Save values
-
-                    if (!resNode.isNull("rating"))
-                        results[i].setRating(resNode.getDouble("rating"));
                 }
-                map.setResults(results);
+                // map.setResults(results);
                 Log.d(TAG, "doInBackground: MapDATA is " + map.getStatus());
             }
         } catch (IOException e) {
@@ -130,6 +134,7 @@ public class GetMapData extends AsyncTask<String, Void, JSONgmap> {
         }
         Log.d(TAG, "onPostExecute: " + map.getStatus());
         Intent start_hospital = new Intent(context, HospitalActivity.class);
+        map.setResults(results.toArray(new results[0]));
         start_hospital.putExtra("gmap", map);
         context.startActivity(start_hospital);
     }
