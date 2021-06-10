@@ -121,7 +121,8 @@ public class ReminderActivity extends Activity {
                 .setSmallIcon(R.drawable.ic_smartphone)
                 .setContentTitle("Reminder - Alert")
                 .setContentText("Don't stare at your screen all day!!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
 
         waterIntentLater = PendingIntent
                 .getActivity(this, 0,
@@ -270,7 +271,7 @@ public class ReminderActivity extends Activity {
                     onScreen = snapshot.child("OnScreen").child(d2s).getValue(Long.TYPE);
                     long hoursOS = TimeUnit.MILLISECONDS.toMinutes(onScreen);
                     if (check[0] & (spnScreen.getSelectedItemPosition() + 2 <= hoursOS)) {
-                        notifyManage.notify(100, notify.build());
+                        notifyManage.notify(getID(), notify.build());
                     }
                 } else {
                     mRef.child("ScreenTime").child("State").setValue(true);

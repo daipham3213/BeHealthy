@@ -17,7 +17,7 @@ import com.fatguy.behealthy.R;
 
 public class StartDiagnose extends AppCompatActivity {
     private String selection = "";
-    private String[] symptoms = new String[]{
+    private final String[] symptoms = new String[]{
             "itching", "skin_rash", "nodal_skin_eruptions", "continuous_sneezing", "shivering",
             "ulcers_on_tongue", "muscle_wasting", "vomiting", "burning_micturition",
             "spotting_ urination", " fatigue", "weight_gain", "anxiety", "cold_hands_and_feets", "mood_swings",
@@ -53,7 +53,7 @@ public class StartDiagnose extends AppCompatActivity {
         Toast.makeText(StartDiagnose.this, "Hello", Toast.LENGTH_SHORT).show();
         Button start = findViewById(R.id.diagnosis_btn_start);
         AutoCompleteTextView auto = findViewById(R.id.diagnosis_autotxt_input);
-        symptoms = Utils.Format2Read(symptoms);
+        Utils.Format2Read(symptoms);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, symptoms);
         auto.setAdapter(adapter);
 
