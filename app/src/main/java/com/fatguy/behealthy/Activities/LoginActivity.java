@@ -25,6 +25,7 @@ public class LoginActivity extends Activity {
     private Button Login;
     private EditText Email;
     private EditText Pass;
+    private TextView btnforgotPass;
     private final FirebaseAuth mAuth;
     private final String TAG = "LoginActivity";
 
@@ -58,6 +59,16 @@ public class LoginActivity extends Activity {
                 signIn(Email.getText().toString().trim(), Pass.getText().toString());
             }
         });
+
+        btnforgotPass = findViewById(R.id.login_btnforgotPassword);
+        btnforgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ForgotPasswordActivity  forgotPassword = new ForgotPasswordActivity(mAuth);
+                startActivity(new Intent(LoginActivity.this, forgotPassword.getClass()));
+            }
+        });
+
     }
 
     public void signIn(String Email, String Password)

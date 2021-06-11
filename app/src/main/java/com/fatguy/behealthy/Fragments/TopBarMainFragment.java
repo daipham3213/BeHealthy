@@ -91,7 +91,18 @@ public class TopBarMainFragment extends Fragment {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        //bug : khi sửa ảnh trong thay đổi tt ra ngoài thì class không OnChange lại
+        // nên hình sẽ ko update
         imagleAvatar(Avatar, root.getContext());
+
+        // Cứu nguy click vào cái Avatar :))
+        Avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagleAvatar(Avatar, root.getContext());
+            }
+        });
+
 
         btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
