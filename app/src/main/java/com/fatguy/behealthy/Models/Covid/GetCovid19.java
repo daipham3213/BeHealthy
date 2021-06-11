@@ -24,13 +24,12 @@ import java.util.ArrayList;
 
 import okhttp3.Response;
 
-public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
+public class GetCovid19 extends AsyncTask<String, Void, Covid> {
     private static final String TAG = "GetCovid19";
     private final Context context;
-    Covid19 statistic = new Covid19();
+    Covid statistic = new Covid();
     ProgressDialog progDailog;
     private String url;
-    private JSONObject jsonRoot;
     private ArrayList<String> province;
     Response response;
 
@@ -49,17 +48,6 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
         progDailog.show();
     }
 
-    @Override
-    protected void onPostExecute(Covid19 covid19) {
-        super.onPostExecute(covid19);
-        if (progDailog.isShowing()) {
-            progDailog.dismiss();
-        }
-        Intent start_covid = new Intent(context, CovidActivity.class);
-        start_covid.putExtra("data", covid19);
-        context.startActivity(start_covid);
-    }
-
     private static String readText(Context context, int resId) throws IOException {
         InputStream is = context.getResources().openRawResource(resId);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -70,10 +58,6 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
             sb.append("\n");
         }
         return sb.toString();
-    }
-
-    private void getData() throws IOException, JSONException {
-        jsonRoot = readJsonFromUrl(url);
     }
 
     @NotNull
@@ -87,36 +71,73 @@ public class GetCovid19 extends AsyncTask<String, Void, Covid19> {
     }
 
     @Override
-    protected Covid19 doInBackground(String... url) {
-        try {
-            this.url = url[0];
-            getData();
-            if (jsonRoot != null) {
-                statistic.setTotal(jsonRoot.getString("Total"));
-                statistic.setDie(jsonRoot.getString("Die"));
-                statistic.setRecovery(jsonRoot.getString("Recovery"));
+    protected void onPostExecute(Covid covid19) {
+        super.onPostExecute(covid19);
+        if (progDailog.isShowing()) {
+            progDailog.dismiss();
+        }
+        Intent start_covid = new Intent(context, CovidActivity.class);
+        start_covid.putExtra("data", covid19);
+        context.startActivity(start_covid);
+    }
 
-                JSONArray data = jsonRoot.optJSONArray("Data");
-                Data[] arrg = new Data[data.length()];
-                for (int i = 0; i < data.length(); i++) {
-                    JSONObject obj_json = data.getJSONObject(i);
-                    String name = obj_json.getString("Name");
-                    String age = obj_json.getString("Age");
-                    String adds = obj_json.getString("Adds");
-                    String status = obj_json.getString("Status");
-                    String country = obj_json.getString("Country");
-                    Data obj_data = new Data(name, age, adds, status, country);
-                    arrg[i] = obj_data;
-                }
-                statistic.setData(arrg);
-            }
-            statistic.setProvince(readProvince(context));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+    @Override
+    protected Covid doInBackground(String... url) {
+        try {
+            this.statistic = new Covid();
+            JSONObject jsonCovid19 = getData(url[0]);
+            JSONObject jsonCovidV3 = getData(url[1]);
+            JSONObject jsonCovidGlobal = getData(url[2]);
+
+            this.statistic.setCovid19(getCovid19(jsonCovid19));
+            this.statistic.setCovidV3(getCovidV3(jsonCovidV3));
+            this.statistic.setCovidV3_glo(getCovidV3(jsonCovidGlobal));
+
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return statistic;
+    }
+
+    private Covid19 getCovid19(JSONObject jsonRoot) throws JSONException, IOException {
+        Covid19 statistic = new Covid19();
+        if (jsonRoot != null) {
+            statistic.setTotal(jsonRoot.getString("Total"));
+            statistic.setDie(jsonRoot.getString("Die"));
+            statistic.setRecovery(jsonRoot.getString("Recovery"));
+
+            JSONArray data = jsonRoot.optJSONArray("Data");
+            assert data != null;
+            Data[] arrg = new Data[data.length()];
+            for (int i = 0; i < data.length(); i++) {
+                JSONObject obj_json = data.getJSONObject(i);
+                String name = obj_json.getString("Name");
+                String age = obj_json.getString("Age");
+                String adds = obj_json.getString("Adds");
+                String status = obj_json.getString("Status");
+                String country = obj_json.getString("Country");
+                Data obj_data = new Data(name, age, adds, status, country);
+                arrg[i] = obj_data;
+            }
+            statistic.setData(arrg);
+        }
+        statistic.setProvince(readProvince(context));
+        return statistic;
+    }
+
+    private CovidV3 getCovidV3(JSONObject jsonRoot) throws JSONException {
+        CovidV3 statistic = new CovidV3();
+        if (jsonRoot != null) {
+            statistic.setCases(jsonRoot.getDouble("cases"));
+            statistic.setDeaths(jsonRoot.getDouble("deaths"));
+            statistic.setRecovered(jsonRoot.getDouble("recovered"));
+            statistic.setActive(jsonRoot.getDouble("active"));
+        }
+        return statistic;
+    }
+
+    private JSONObject getData(String url) throws IOException, JSONException {
+        return readJsonFromUrl(url);
     }
 
     public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {

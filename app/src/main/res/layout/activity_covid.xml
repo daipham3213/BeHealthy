@@ -2,170 +2,389 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/covid_ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/covid_ConstraintLayout"
     tools:context=".Activities.CovidActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/coivd_view"
-        android:layout_width="366dp"
-        android:layout_height="173dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="164dp"
-        android:layout_marginEnd="10dp"
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/covid_Linear"
-        android:layout_width="339dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
-
-        <TextView
-            android:id="@+id/coivid_txt_total"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="Number of infected people"
-            android:textColor="@color/md_black_1000" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/coivid_txt_die"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="Number of patients who died"
-            android:textColor="@color/md_red_A100" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="132dp"
+                android:layout_marginTop="32dp"
+                android:text="COVID-19 Statistics"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/coivd_txt_recovery"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="Number of patients recovered"
-            android:textColor="@color/md_green_A700" />
-    </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="20dp">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="145dp"
-        android:layout_height="82dp"
-        android:layout_marginStart="133dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="133dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_covid19" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:text="Covid-19 epidemic situation in Vietnam"
-        android:textColor="@color/md_black_1000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView7"
+                        tools:layout_editor_absoluteX="0dp">
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="126dp"
-        android:text="Situation of Covid-19 epidemic in provinces"
-        android:textColor="@color/md_black_1000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/covid_Linear" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-    <ListView
-        android:id="@+id/covid_list"
-        android:layout_width="355dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="parent" />
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="INFECTED"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_red_600"
+                                android:textSize="12sp" />
 
-    <AutoCompleteTextView
-        android:id="@+id/Covid_autotext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="30dp"
-        android:hint="The place you want to search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                            <TextView
+                                android:id="@+id/textView25"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="IN TREATMENT"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_amber_600"
+                                android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/Covid_btn_Search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="60dp"
-        android:text="Search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
-        app:layout_constraintStart_toEndOf="@+id/Covid_autotext"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="RECOVERED"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_green_600"
+                                android:textSize="12sp" />
 
-    <LinearLayout
-        android:layout_width="380dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/coivd_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+                            <TextView
+                                android:id="@+id/textView27"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text="DEATHS"
+                                android:textAlignment="center"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="22dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="\tName" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text=" Age\s" />
+                            <TextView
+                                android:id="@+id/cov_infected"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="9.980"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_red_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="\t\t\tAdds" />
+                            <TextView
+                                android:id="@+id/cov_treatment"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="6.115"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_amber_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="66dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="\tStauts" />
+                            <TextView
+                                android:id="@+id/cov_recovered"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="3.804"
+                                android:textAlignment="center"
+                                android:textColor="@color/md_green_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Country" />
-    </LinearLayout>
+                            <TextView
+                                android:id="@+id/cov_deaths"
+                                android:layout_width="90dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text="57"
+                                android:textAlignment="center"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView7"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        app:cardBackgroundColor="@color/md_red_300"
+                        app:cardCornerRadius="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="VIỆT NAM"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_white_1000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="20dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView9"
+                        tools:layout_editor_absoluteX="0dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                android:text="TOTAL INFECTED"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/md_red_600"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                android:text="IN TREATMENT"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/md_amber_600"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                android:text="RECOVERED"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/md_green_600"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text="DEATHS"
+                                android:textAlignment="textEnd"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/cov_glo_infected"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_weight="1"
+                                android:text="175.691.350"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/md_red_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cov_glo_treatment"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_weight="1"
+                                android:text="12.648.932"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/md_amber_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cov_glo_recovered"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_weight="1"
+                                android:text="159.251.929"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/md_green_600"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/cov_glo_deaths"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text="3.790.489"
+                                android:textAlignment="textStart"
+                                android:textColor="@android:color/darker_gray"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView9"
+                        android:layout_width="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        app:cardBackgroundColor="@color/md_blue_400"
+                        app:cardCornerRadius="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="GLOBAL"
+                            android:textAlignment="center"
+                            android:textColor="@color/md_white_1000"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/coivd_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/Covid_autotext"
+                    app:layout_constraintVertical_bias="0.493" />
+
+                <TextView
+                    android:id="@+id/cov_txtTitleSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Some text"
+                    android:textColor="@color/md_black_1000"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/Covid_autotext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:hint="The place you want to search"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cov_txtTitleSearch" />
+
+                <Button
+                    android:id="@+id/Covid_btn_Search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="60dp"
+                    android:text="Search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/Covid_autotext"
+                    app:layout_constraintTop_toBottomOf="@+id/cov_txtTitleSearch" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

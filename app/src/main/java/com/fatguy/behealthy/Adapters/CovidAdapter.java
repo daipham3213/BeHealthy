@@ -2,7 +2,6 @@ package com.fatguy.behealthy.Adapters;
 
 
 import android.content.Context;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,14 +38,13 @@ public class CovidAdapter extends RecyclerView.Adapter<CovidAdapter.ViewHolder> 
     }
 
     public CovidAdapter() {
-
-//        Data init = new Data();
-//        init.setCountry("Country\t");
-//        init.setStatus("Status\t");
-//        init.setAdds("Address\t");
-//        init.setAge("Age\t");
-//        init.setName("Name\t");
-//        dataArrayAdapter.add(init);
+        Data init = new Data();
+        init.setCountry("Country");
+        init.setStatus("Status");
+        init.setAdds("Address");
+        init.setAge("Age");
+        init.setName("Name");
+        dataArrayAdapter.add(init);
     }
 
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
@@ -87,19 +85,19 @@ public class CovidAdapter extends RecyclerView.Adapter<CovidAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView name;
-        private TextView age;
-        private TextView adds;
-        private TextView stauts;
-        private TextView country;
+        private final TextView name;
+        private final TextView age;
+        private final TextView adds;
+        private final TextView stauts;
+        private final TextView country;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.covid_txt_id);
-            age = (TextView) itemView.findViewById(R.id.covid_txt_age);
-            adds = (TextView) itemView.findViewById(R.id.covid_txt_adds);
-            stauts = (TextView) itemView.findViewById(R.id.covid_txt_status);
-            country = (TextView) itemView.findViewById(R.id.covid_txt_country);
+            name = itemView.findViewById(R.id.covid_txt_id);
+            age = itemView.findViewById(R.id.covid_txt_age);
+            adds = itemView.findViewById(R.id.covid_txt_adds);
+            stauts = itemView.findViewById(R.id.covid_txt_status);
+            country = itemView.findViewById(R.id.covid_txt_country);
 
 
         }
