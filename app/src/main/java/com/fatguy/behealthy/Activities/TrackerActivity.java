@@ -39,6 +39,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+@SuppressWarnings("ConstantConditions")
 public class TrackerActivity extends Activity implements SensorEventListener {
     private IconRoundCornerProgressBar step_chart;
     private FirebaseDatabase mData;
@@ -87,8 +88,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
         super.onResume();
         running = true;
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (stepSensor == null)
-        {
+        if (stepSensor == null) {
             Toast.makeText(this, "Sensor not detected!", Toast.LENGTH_SHORT).show();
         } else
             sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI);
@@ -110,8 +110,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
 
     }
 
-    private void reset_chart()
-    {
+    private void reset_chart() {
         step_chart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,19 +145,14 @@ public class TrackerActivity extends Activity implements SensorEventListener {
 
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot) {
-                if (snapshot.hasChild(d2s))
-                {
+            public void onDataChange(@org.jetbrains.annotations.NotNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(d2s)) {
                     counted[0] = snapshot.child(d2s).child("counted").getValue(Long.TYPE);
-                    if (snapshot.child(d2s).child("target").getValue() != null)
-                    {
+                    if (snapshot.child(d2s).child("target").getValue() != null) {
                         target[0] = snapshot.child(d2s).child("target").getValue(Long.TYPE);
-                    }
-                    else mRef.child(d2s).child("target").setValue(8000);
+                    } else mRef.child(d2s).child("target").setValue(8000);
                     progress(target[0], counted[0]);
-                }
-                else
-                {
+                } else {
                     mRef.child(d2s).child("counted").setValue(0);
                     mRef.child(d2s).child("target").setValue(8000);
                     Log.d(TAG, "New instance set!");
@@ -173,7 +167,7 @@ public class TrackerActivity extends Activity implements SensorEventListener {
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError error) {
+            public void onCancelled(@org.jetbrains.annotations.NotNull @NotNull DatabaseError error) {
 
             }
         });
@@ -184,38 +178,38 @@ public class TrackerActivity extends Activity implements SensorEventListener {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         mRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
-                    LocalDate date = LocalDate.now().minusDays(7);
-                    for (int i = 0; i<7; i++) {
-                        String st_date = date.format(formatter);
-                        int finalI = i;
-                        if (snapshot.hasChild(st_date) && snapshot.child(st_date).child("target").getValue(Long.TYPE) != null) {
-                            long val = snapshot.child(st_date).child("counted").getValue(Long.TYPE);
-                            weekly_data.add(new BarEntry(i, val));
-                            date_data.add(new BarEntry(i,date.getDayOfMonth()));
-                            Log.d(TAG, "onDataChange: " + val + " -" + st_date);
-                        }
-                        date = date.plusDays(1);
+            @Override
+            public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
+                LocalDate date = LocalDate.now().minusDays(7);
+                for (int i = 0; i<7; i++) {
+                    String st_date = date.format(formatter);
+                    int finalI = i;
+                    if (snapshot.hasChild(st_date) && snapshot.child(st_date).child("target").getValue(Long.TYPE) != null) {
+                        long val = snapshot.child(st_date).child("counted").getValue(Long.TYPE);
+                        weekly_data.add(new BarEntry(i, val));
+                        date_data.add(new BarEntry(i,date.getDayOfMonth()));
+                        //Log.d(TAG, "onDataChange: " + val + " -" + st_date);
                     }
-                    BarDataSet bardataset = new BarDataSet(weekly_data, "Daily record");
-                    BarDataSet days = new BarDataSet(date_data, "Date");
-                    bardataset.setColors(ColorTemplate.LIBERTY_COLORS);
-                    BarData data = new BarData(days,bardataset);
-
-                    week_chart.setData(data);
-                    week_chart.setDrawBarShadow(true);
-                    Description desc = new Description();
-                    desc.setText("Weekly counted step");
-                    week_chart.setDescription(desc);
-                    week_chart.invalidate();
+                    date = date.plusDays(1);
                 }
+                BarDataSet bardataset = new BarDataSet(weekly_data, "Daily record");
+                BarDataSet days = new BarDataSet(date_data, "Date");
+                bardataset.setColors(ColorTemplate.LIBERTY_COLORS);
+                BarData data = new BarData(days,bardataset);
 
-                @Override
-                public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+                week_chart.setData(data);
+                week_chart.setDrawBarShadow(true);
+                Description desc = new Description();
+                desc.setText("Weekly counted step");
+                week_chart.setDescription(desc);
+                week_chart.invalidate();
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
+
+            }
+        });
 
     }
 

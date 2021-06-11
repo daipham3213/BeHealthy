@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,7 +53,6 @@ public class ReminderActivity extends Activity {
     private SwitchButton swtScreen;
     private Spinner spnWater;
     private Spinner spnScreen;
-    private RecyclerView rclWater;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
     private long onScreen;
@@ -68,13 +68,11 @@ public class ReminderActivity extends Activity {
     private IconRoundCornerProgressBar waterBar;
     private String d2s, d1s;
     private long item, item2;
-    PendingIntent waterIntentLater, waterIntentOk;
-    int hourlater = 0;
-    Intent intentWater,intentWater2;
-    PendingIntent pIntent,pIntent2 ;
+    Intent intentWater;
+    PendingIntent pIntent;
 
     NotificationManagerCompat notifyManage;
-    NotificationCompat.Builder notify;
+    Notification notifyOnScreen;
     Notification water_notify;
 
     @Override
@@ -116,36 +114,19 @@ public class ReminderActivity extends Activity {
                 minStart = Calendar.getInstance().get(Calendar.MINUTE);
             }
         });
-
-        notify = new NotificationCompat.Builder(this, "fatguyA")
-                .setSmallIcon(R.drawable.ic_smartphone)
-                .setContentTitle("Reminder - Alert")
-                .setContentText("Don't stare at your screen all day!!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
-
-        waterIntentLater = PendingIntent
-                .getActivity(this, 0,
-                        new Intent(this, ReminderActivity.class),
-                        PendingIntent.FLAG_ONE_SHOT);
-
-        waterIntentOk = PendingIntent.
-                getActivity(this, 0,
-                        new Intent(this, ReminderActivity.class),
-                        PendingIntent.FLAG_ONE_SHOT);
-
+        notifyManage = NotificationManagerCompat.from(this);
         user = new User();
 
         LoadList(R.array.screen_time, spnScreen);
         LoadList(R.array.cup_size, spnWater);
-        LoadData();
-
-
 
         spnWater.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                DisplaySchedule(waterAmount - consumed, (position + 1) * 100);
+                SharedPreferences water = getSharedPreferences("water-hour", MODE_PRIVATE);
+                int h = water.getInt("water-hour", 0);
+                DisplaySchedule(waterAmount - consumed, (position + 1) * 100, h, 30);
+                Log.d(TAG, "onItemSelected: spnWater H-" + h);
             }
 
             @Override
@@ -163,6 +144,8 @@ public class ReminderActivity extends Activity {
                 }
             }
         });
+
+        LoadData();
     }
 
     private void getTime() {
@@ -174,8 +157,21 @@ public class ReminderActivity extends Activity {
         return (int) new Date().getTime();
     }
 
+    private void NoticeScreenTime() {
+        notifyOnScreen = new NotificationCompat.Builder(this, "fatguyA")
+                .setSmallIcon(R.drawable.ic_smartphone)
+                .setContentTitle("Reminder - Alert")
+                .setContentText("Don't stare at your screen all day!!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notifyManage.notify(getID(), notifyOnScreen);
+    }
+
     private void NoticeToDrinkWater() {
-        intentWater = new Intent(this, ReminderActivity.class);
+        intentWater = new Intent(this, ReminderActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intentWater.putExtra("drinked", "yes");
         pIntent = PendingIntent.getActivity(this, 0, intentWater, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -188,7 +184,6 @@ public class ReminderActivity extends Activity {
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .addAction(R.drawable.ic_glass_of_water, "OK",pIntent)
                 .build();
-        notifyManage = NotificationManagerCompat.from(this);
         notifyManage.notify(getID(), water_notify);
     }
 
@@ -196,10 +191,18 @@ public class ReminderActivity extends Activity {
         item = (spnWater.getSelectedItemPosition() + 1) * 100;
         mRef = FirebaseDatabase.getInstance().getReference().child("Reminder").child(mAuth.getUid());
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onDataChange(@NonNull @org.jetbrains.annotations.NotNull DataSnapshot snapshot) {
                 item2 = snapshot.child("DrinkWater").child(d2s).child("Consumed").getValue(Long.class);
                 mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(item + item2);
+
+                SharedPreferences water = getSharedPreferences("water-hour", MODE_PRIVATE);
+                int hStart = snapshot.child("DrinkWater").child("Hour").getValue(Integer.TYPE);
+                hStart += water.getInt("water-hour", 0) + 1;
+                water.edit().putInt("water-hour", hStart).apply();
+                DisplaySchedule(waterAmount - consumed, cupSize, hStart, 30);
+                Log.d(TAG, "onDataChange: waterIntentOk H-" + hStart);
                 Toast.makeText(ReminderActivity.this, "Great " + item + "ml always drink water on time and today you drank " + (item + item2) + "ml of water", Toast.LENGTH_SHORT).show();
             }
 
@@ -207,11 +210,7 @@ public class ReminderActivity extends Activity {
             public void onCancelled(@NonNull @org.jetbrains.annotations.NotNull DatabaseError error) {
             }
         });
-    }
 
-    private void waterIntentLater() {
-        Toast.makeText(ReminderActivity.this, "Later Water", Toast.LENGTH_SHORT).show();
-        hourStart++;
     }
 
     private void createNotificationChannel() {
@@ -234,8 +233,6 @@ public class ReminderActivity extends Activity {
         mRef.child("ScreenTime").child("Value").setValue(spnScreen.getSelectedItemPosition());
         mRef.child("DrinkWater").child("Enable").setValue(swtWater.isChecked());
         mRef.child("DrinkWater").child("CupSize").setValue((spnWater.getSelectedItemPosition() + 1) * 100);
-        mRef.child("DrinkWater").child("Hour").setValue(hourStart);
-        mRef.child("DrinkWater").child("Min").setValue(minStart);
     }
 
     private void LoadList(int resId, Spinner spn) {
@@ -256,7 +253,7 @@ public class ReminderActivity extends Activity {
         if (extras!=null) {
             if (extras.getString("drinked").equals("yes")) {
                 waterIntentOk();
-            } else { waterIntentLater();}
+            }
         }
 
         mRef.child("ScreenTime").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -271,7 +268,7 @@ public class ReminderActivity extends Activity {
                     onScreen = snapshot.child("OnScreen").child(d2s).getValue(Long.TYPE);
                     long hoursOS = TimeUnit.MILLISECONDS.toMinutes(onScreen);
                     if (check[0] & (spnScreen.getSelectedItemPosition() + 2 <= hoursOS)) {
-                        notifyManage.notify(getID(), notify.build());
+                        NoticeScreenTime();
                     }
                 } else {
                     mRef.child("ScreenTime").child("State").setValue(true);
@@ -301,10 +298,12 @@ public class ReminderActivity extends Activity {
         });
 
         mRef.child("DrinkWater").addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressWarnings("ConstantConditions")
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 int hStart = 0;
                 int mStart = 0;
+                SharedPreferences water = getSharedPreferences("water-hour", MODE_PRIVATE);
                 if (snapshot.hasChild("WaterAmount") & snapshot.child("WaterAmount").getValue(Long.class) != null) {
                     waterAmount = snapshot.child("WaterAmount").getValue(Float.class);
                 } else
@@ -312,7 +311,12 @@ public class ReminderActivity extends Activity {
 
                 if (snapshot.child(d2s).hasChild("Consumed")) {
                     consumed = snapshot.child(d2s).child("Consumed").getValue(Long.TYPE);
-                } else mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(0);
+                    water.edit().putInt("water-hour", 0).apply();
+                    mRef.child("DrinkWater").child("Hour").setValue(7);
+                    mRef.child("DrinkWater").child("Min").setValue(30);
+                } else {
+                    mRef.child("DrinkWater").child(d2s).child("Consumed").setValue(0);
+                }
 
                 if (snapshot.hasChild("CupSize")) {
                     cupSize = snapshot.child("CupSize").getValue(Long.class);
@@ -328,15 +332,16 @@ public class ReminderActivity extends Activity {
 
                 } else {
                     mRef.child("DrinkWater").child("Hour").setValue(7);
-                    mRef.child("DrinkWater").child("Hour").setValue(30);
+                    mRef.child("DrinkWater").child("Min").setValue(30);
                     hStart = 7;
                     mStart = 30;
                 }
                 if (hourStart == hStart & minStart == mStart) NoticeToDrinkWater();
                 progress(waterAmount, consumed);
                 spnWater.setSelection((int) (cupSize / 100 - 1));
-
-                DisplaySchedule(waterAmount - consumed, cupSize);
+                water.edit().putInt("water-hour", hStart).apply();
+                DisplaySchedule(waterAmount - consumed, cupSize, hStart, mStart);
+                Log.d(TAG, "onDataChange: LoadData H-" + hStart);
             }
 
             @Override
@@ -346,13 +351,14 @@ public class ReminderActivity extends Activity {
         });
     }
 
-    private void DisplaySchedule(float amount, long cupSize) {
-        scheduleUp(amount, cupSize);
-        rclWater = findViewById(R.id.reminder_rclWater);
-        TimeStampAdapter schedule = new TimeStampAdapter(ReminderActivity.this, hour, min, cups);
+    private void DisplaySchedule(float amount, long cupSize, int hour, int minus) {
+        scheduleUp(amount, cupSize, hour, minus);
+        RecyclerView rclWater = findViewById(R.id.reminder_rclWater);
+        TimeStampAdapter schedule = new TimeStampAdapter(ReminderActivity.this, this.hour, this.min, cups);
 
         rclWater.setAdapter(schedule);
         rclWater.setLayoutManager(new LinearLayoutManager(ReminderActivity.this));
+        schedule.notifyDataSetChanged();
     }
 
     private float getWaterAmount(float weight, int age) {
@@ -367,15 +373,11 @@ public class ReminderActivity extends Activity {
     private void progress(float target, float counted) {
         if (target == 0) target = 1; //divide by 0
         float percent = (counted / target) * 100;
-//        this.percent.setText(String.valueOf((int)percent)+"%");
-//        number.setText(total_step+" / "+target);
         waterBar.setProgress(percent);
     }
 
 
-    private void scheduleUp(float amount, long cupSize) {
-        int h = hourStart;
-        int m = minStart;
+    private void scheduleUp(float amount, long cupSize, int h, int m) {
 
         cups = new ArrayList<>();
         hour = new ArrayList<>();
